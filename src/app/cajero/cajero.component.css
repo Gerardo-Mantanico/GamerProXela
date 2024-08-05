@@ -1,0 +1,56 @@
+*{
+  border: 0px;
+  margin: 0%;
+}
+.containera{
+  width: 100%;
+  height: 100vh;
+}
+
+.barra{
+  background-color: #20153c;
+  height: 50px;
+  color: white;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+.ms-auto{
+  margin-right: 20px;
+}
+.menu{
+  background-color: #20153c;
+  height: 93vh;
+  color:  white;
+  text-align: center;
+}
+
+h1{
+  margin-top: 50px;
+}
+.menu ul{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.menu li {
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+samp{
+  margin-left: 10px;
+}
+
+.menu li:active {
+  background-color: white;
+  color: #20153c;
+
+}
+.menu li:hover, .ms-auto:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #20153c;
+}
