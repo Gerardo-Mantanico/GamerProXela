@@ -4,6 +4,7 @@ import { CajeroComponent } from './cajero/cajero.component';
 import { LoginComponent } from './login/login.component';
 import { VentaComponent } from './cajero/venta/venta.component';
 import { FacturaComponent } from './cajero/factura/factura.component';
+import { TarjetaDescuentoComponent } from './cajero/tarjeta-descuento/tarjeta-descuento.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -11,6 +12,7 @@ export const routes: Routes = [
   {path:'cajero',component:CajeroComponent},
   {path:'venta',component:VentaComponent},
   {path:'factura',component:FacturaComponent},
+  {path:'tarjeta-descuento',component:TarjetaDescuentoComponent},
 ];
 
 @NgModule({
