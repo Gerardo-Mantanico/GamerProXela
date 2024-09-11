@@ -1,9 +1,11 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI # type: ignore
 from app.dependencies import get_query_token, get_token_header
-from .internal import admin
-from .routers import items, users,sucursales,productos
+from app.internal import admin
+from app.routers import items, users,sucursales,productos
 
 """
+para resolver el error  export PYTHONPATH=/home/gerardo/Documents/2024/second-semester/files/first-proyect/GamerProXela/api
+
 para agregar un token de acceso
 app = FastAPI(dependencies=[Depends(get_query_token)])
 """
