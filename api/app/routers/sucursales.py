@@ -1,47 +1,62 @@
-from fastapi import APIRouter,HTTPException
-from ..db.db import session
-from ..models.sucursales import Sucursal
-from ..services import  sucursal_s
+from fastapi import APIRouter,HTTPException # type: ignore
+from app.db.repository.sucursalDB import SucursalDB
+from app.models.sucursales import Sucursal
+conn = None
 
+
+def set_conn(connexion):
+    global conn
+    conn = connexion
+       
 
 router = APIRouter(
-    prefix="/sucursales",
+    prefix="/branch",
     tags=["sucursales"],
     responses={404: {"description": "Not found"}},
 )
 
 
+@router.post("/insert")
+def insert (user_data: Sucursal):
+     data = user_data.dict() #formater dato
+     data.pop("id"); # para quitar el id de la clase
+     SucursalDB.register_branch(conn,data)
+     print(data)
 
-@router.post("/")   
-async def create_sucursales(nombre: str, direccion: str):
-    sucursal =  sucursal_s.create_sucursales(session, nombre, direccion)
-    return {"sucursal registrada ": sucursal.nombre}
+
+@router.delete("/delete/{id}")
+def delete_branch(id: int):
+     data = SucursalDB.delete_branch(conn,id)
 
 
 @router.get("/{id}")
-async def get_secursal(id: int):
-    sucursal_query = session.query(Sucursal).filter(Sucursal.id_sucursal == id)
-    if sucursal_query.first() is None:
-        raise HTTPException(status_code=404, detail="Sucursal not found")
-    return sucursal_query.first()
+def get_branch(id:int):
+     data = SucursalDB.see_branch(conn,id)
+     dictionary = {
+            "id": data[0],
+            "address": data[1],
+            "name": data[2],
+            "no_branch": data[3]
+     }
+     return dictionary
 
 
-
-@router.put("/{id}")
-async def update_sucursal(id: int, new_nombre: str, new_direccion: str):
-    sucursal_query = session.query(Sucursal).filter(Sucursal.id_sucursal == id)
-    sucursal = sucursal_query.first()
-    if new_nombre:
-        sucursal.nombre = new_nombre
-    if new_direccion:
-        sucursal.direccion = new_direccion
-    session.add(sucursal)
-    session.commit()
+@router.put("/update/{id}")
+def update_branch(data_sucursal: Sucursal, id:int): 
+     data = data_sucursal.dict()
+     data ["id"] = id
+     SucursalDB.update_branch(conn,data)
 
 
-@router.delete("/{id}")
-async def delete_sucursal(id: int):
-    sucursal = session.query(Sucursal).filter(Sucursal.id_sucursal == id).first()
-    session.delete(sucursal)
-    session.commit()
-    return {"Sucursal deleted ": sucursal.nombre}
+@router.get("/")
+def root():
+     items = []
+     for data in SucursalDB.branch_list(conn):  # Usa `conn.get_connection()` si necesitas obtener la conexión
+        dictionary = {
+            "id": data[0],
+            "address": data[1],
+            "name": data[2],
+            "no_branch": data[3]
+        }
+        items.append(dictionary)
+     return items

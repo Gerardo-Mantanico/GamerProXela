@@ -1,34 +1,31 @@
 from fastapi import Depends, FastAPI # type: ignore
 from app.dependencies import get_query_token, get_token_header
-from app.internal import admin
-from app.routers import items, users,sucursales,productos
+from app.routers import sucursales, productos,usuario,login,productoBodega,bodega,estanteria,estanteriaProducto
+from db.connection.db import Connection
 
-"""
-para resolver el error  export PYTHONPATH=/home/gerardo/Documents/2024/second-semester/files/first-proyect/GamerProXela/api
 
-para agregar un token de acceso
-app = FastAPI(dependencies=[Depends(get_query_token)])
-"""
+
+conn = Connection()
 app = FastAPI()
 
 
-app.include_router(users.router)
-app.include_router(items.router)
+sucursales.conn=conn;
+productos.conn=conn;
+usuario.conn=conn;
+login.conn=conn;
+productoBodega.conn=conn;
+bodega.conn = conn;
+estanteria.conn = conn;
+estanteriaProducto.conn = conn;
+
 app.include_router(sucursales.router)
 app.include_router(productos.router)
-"""
-app.include_router(
-    admin.router,
-    prefix="/admin",
-    tags=["admin"],
-    dependencies=[Depends(get_token_header)],
-    responses={418: {"description": "I'm a teapot"}},
-)
+app.include_router(usuario.router)
+app.include_router(login.router)
+app.include_router(productoBodega.router)
+app.include_router(bodega.router)
+app.include_router(estanteria.router)
+app.include_router(estanteriaProducto.router)
 
-
-"""
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello Bigger Applications!"}
+#uvicorn main:app --host 0.0.0.0 --port 8080  --reload
+#export PYTHONPATH=/home/gerardo/Documents/2024/second-semester/files/first-proyect/GamerProXela/api
