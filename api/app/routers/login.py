@@ -14,7 +14,8 @@ router = APIRouter(
 
 @router.post("/insert")
 def insert (data_login: Login):
-    data = data_login.dict() 
+    data = data_login.dict()
+    print(data) 
     credenciales=LoginDB.ingresar(conn,data)
   
     dictionary = {

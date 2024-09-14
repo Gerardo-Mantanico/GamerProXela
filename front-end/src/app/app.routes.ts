@@ -1,22 +1,32 @@
-import { Component, NgModule } from '@angular/core';
-import { RouterModule,Routes } from '@angular/router';
-import { CajeroComponent } from './cajero/cajero.component';
+import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { VentaComponent } from './cajero/venta/venta.component';
-import { FacturaComponent } from './cajero/factura/factura.component';
-import { TarjetaDescuentoComponent } from './cajero/tarjeta-descuento/tarjeta-descuento.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  {path:'login',component:LoginComponent},
-  {path:'cajero',component:CajeroComponent},
-  {path:'venta',component:VentaComponent},
-  {path:'factura',component:FacturaComponent},
-  {path:'tarjeta-descuento',component:TarjetaDescuentoComponent},
-];
+  { path: 'login', component: LoginComponent },
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {}
+  {
+    path: 'cajero', loadComponent: () => import('./cajero/cajero.component'),
+      children: [
+        {
+          path: 'descuento', loadComponent: () => import('./cajero/tarjeta-descuento/tarjeta-descuento.component')
+        },
+        {
+          path: 'venta', loadComponent: () => import('./cajero/venta/venta.component')
+        },
+        {
+          path: 'factura', loadComponent:()=>import('./cajero/factura/factura.component')
+        }
+
+      ]
+  },
+  {
+    path: 'admin', loadComponent: () => import('./admin/admin.component'),
+      children: [ 
+          {
+            path:'registrar-empleado', loadComponent: ()=> import('./admin/registrar-empleado/registrar-empleado.component'),
+          }
+          
+      ]
+  },
+];

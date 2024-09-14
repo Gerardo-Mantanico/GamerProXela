@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './factura.component.html',
   styleUrl: './factura.component.css'
 })
-export class FacturaComponent {
+export default class FacturaComponent {
 
 }

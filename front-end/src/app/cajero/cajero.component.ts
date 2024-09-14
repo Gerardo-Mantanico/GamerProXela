@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { VentaComponent } from "./venta/venta.component";
-import { FacturaComponent } from "./factura/factura.component";
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+
 
 @Component({
   selector: 'app-cajero',
   standalone: true,
-  imports: [RouterOutlet,RouterLink],
+  imports: [RouterLink,RouterLinkActive,RouterOutlet],
   templateUrl: './cajero.component.html',
   styleUrl: './cajero.component.css'
 })
-export class CajeroComponent {
+export   default  class CajeroComponent {
 
 }

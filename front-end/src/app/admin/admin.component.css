@@ -1,0 +1,25 @@
+.container-menu{
+    background-color: #20153c;
+}
+
+#menu{
+    list-style: none;
+    display: flex;
+    padding: 0px;
+    gap: 8px;
+    margin-top: 60px;
+    width: 210px;
+}
+i{
+    margin-right: 8px;
+}
+li:hover{
+    background-color: white;
+    color: #20153c;
+    border-radius: 8px;
+}
+.py-3{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

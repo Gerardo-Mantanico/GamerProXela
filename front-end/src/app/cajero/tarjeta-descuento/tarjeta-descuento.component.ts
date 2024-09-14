@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-tarjeta-descuento',
@@ -7,6 +8,6 @@ import { Component } from '@angular/core';
   templateUrl: './tarjeta-descuento.component.html',
   styleUrl: './tarjeta-descuento.component.css'
 })
-export class TarjetaDescuentoComponent {
+export default class TarjetaDescuentoComponent {
 
 }

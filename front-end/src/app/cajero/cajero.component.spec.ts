@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import CajeroComponent from "./cajero.component";
 
-import { CajeroComponent } from './cajero.component';
 
 describe('CajeroComponent', () => {
   let component: CajeroComponent;

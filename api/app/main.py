@@ -2,12 +2,22 @@ from fastapi import Depends, FastAPI # type: ignore
 from app.dependencies import get_query_token, get_token_header
 from app.routers import sucursales, productos,usuario,login,productoBodega,bodega,estanteria,estanteriaProducto
 from db.connection.db import Connection
-
+from starlette.middleware.cors import CORSMiddleware # type: ignore
 
 
 conn = Connection()
 app = FastAPI()
 
+
+
+# Configuración del Middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite todos los orígenes; cambia esto según tus necesidades
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos HTTP; ajusta según tus necesidades
+    allow_headers=["*"],  # Permite todos los encabezados; ajusta según tus necesidades
+)
 
 sucursales.conn=conn;
 productos.conn=conn;
