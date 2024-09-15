@@ -25,8 +25,16 @@ export const routes: Routes = [
       children: [ 
           {
             path:'registrar-empleado', loadComponent: ()=> import('./admin/registrar-empleado/registrar-empleado.component'),
+          },
+          {
+            path:'sucursal',loadComponent: () => import('./admin/sucursal/sucursal.component'),
+          },
+          {
+            path:'historial',loadComponent: () => import('./admin/historial/historial.component')
+          },
+          {
+            path:'reportesAdmin', loadComponent:() => import('./admin/reportes/reportes.component')
           }
-          
       ]
   },
 ];

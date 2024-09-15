@@ -1,49 +1,95 @@
+<div class="container">
+    <div class="header-menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+        </svg>
+        <span>
+            "¡Bienvenido! Complete los detalles a continuación para dar de alta a un nuevo empleado y ayudar a nuestro equipo a crecer."
+        </span>
+    </div>
+  <div class="row mt-5">
+      <div class="col-lg-7">
 
-    <div>
-      <div class="col-lg-6">
-            
-      
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
-        <input type="text" class="form-control" placeholder="Nombre" aria-label="namecliente" aria-describedby="basic-addon1">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
-        <input type="text" class="form-control" placeholder="Usuario" aria-label="namecliente" aria-describedby="basic-addon1">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">contact_mail</i></span>
-        <input type="email" class="form-control" placeholder="cliente@gmail.com" aria-label="Email" aria-describedby="basic-addon1">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">pin_drop</i></span>
-        <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala" aria-label="Telefono" aria-describedby="basic-addon1">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">phone_iphone</i></span>
-        <input type="number" class="form-control" placeholder="77667898" aria-label="Telefono" aria-describedby="basic-addon1">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">supervisor_account</i></span>
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Tipo de empleado</option>
-          <option value="1">Bodeguero</option>
-          <option value="2">Cajero</option>
-          <option value="3">Estanteria</option>
-        </select>
+        <div class="d-flex justify-content-center">
+            <span>Registro de empleado</span>
+          </div>
 
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">store</i></span>
-        <select class="form-select" aria-label="Default select example">
-          <option selected>Sucursales</option>
-          <option value="1">zona 1</option>
-          <option value="2">zona 3</option>
-          <option value="3">Three</option>
-        </select>  
+           <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
+              <input type="text" class="form-control" placeholder="Nombre" aria-label="namecliente" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
+              <input type="text" class="form-control" placeholder="Usuario" aria-label="namecliente" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">contact_mail</i></span>
+              <input type="email" class="form-control" placeholder="cliente@gmail.com" aria-label="Email" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">pin_drop</i></span>
+              <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala" aria-label="Dirección" aria-describedby="basic-addon1">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">phone_iphone</i></span>
+              <input type="number" class="form-control" placeholder="77667898" aria-label="Teléfono" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">supervisor_account</i></span>
+              <select class="form-select" aria-label="Tipo de empleado">
+                  <option selected>Tipo de empleado</option>
+                  <option value="1">Cajero</option>
+                  <option value="2">Bodega</option>
+                  <option value="3">Inventario</option>
+                  <option value="4">Administrador</option>
+              </select>
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">store</i></span>
+              <select class="form-select" aria-label="Sucursales">
+                  <option selected>Sucursales</option>
+                  <option value="1">Zona 1</option>
+                  <option value="2">Zona 3</option>
+                  <option value="3">Three</option>
+              </select>
+          </div>
+          <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">lock</i></span>
+              <input type="password" class="form-control" placeholder="*******" aria-label="Contraseña" aria-describedby="basic-addon1">
+          </div>
+          <button type="button" class="btn btn-primary nput-group mb-3">Aceptar</button>
+      </div>    
+      <div class="col-lg-5">
+        <div class="d-flex justify-content-center">
+            <span>empleado</span>
+          </div>
+          <table class="table">
+              <thead>
+                  <tr>
+                  
+                      <th scope="col">Usuario</th>
+                      <th scope="col">Rol</th>
+                      <th scope="col">Sucursal</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>Cristiano Ronaldo (dcristiano)</td>
+                      <td>Cajero</td>
+                      <td>Zona 2</td>
+                      <td><i class="bi bi-pen-fill"></i></td>
+                      <td><i class="bi bi-trash-fill"></i></td>
+                  </tr>
+                  <tr>
+                      <th scope="row">2</th>
+                      <td>Jacob</td>
+                      <td>Thornton</td>
+                      <td>fat</td>
+                  </tr>
+                  <tr>
+                      <th scope="row">3</th>
+                      <td colspan="2">Larry the Bird</td>
+                      <td>twitter</td>
+                  </tr>
+              </tbody>
+          </table>
       </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">lock</i></span>
-        <input type="password" class="form-control" placeholder="*******" aria-label="Email" aria-describedby="basic-addon1">
-      </div>
-      <button type="button" class="btn btn-primary">Aceptar</button>
-  </div>    
-      </div>
-          
-    
+  </div>
+</div>

@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './sucursal.component.html',
   styleUrl: './sucursal.component.css'
 })
-export class SucursalComponent {
+export default class SucursalComponent {
 
 }
