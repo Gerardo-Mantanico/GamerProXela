@@ -26,7 +26,7 @@ class ProductoDB:
     def see_producto(self, id):
      with self.conn.cursor() as cur:
         cur.execute("""
-            SELECT categoria FROM bodega.producto WHERE id_producto = %s
+            SELECT categoria FROM bodega.producto WHERE codigo_producto = %s
         """, (id,))
         categoria_result = cur.fetchone()
 
@@ -38,14 +38,41 @@ class ProductoDB:
         # Ejecuta la segunda consulta basada en la categoría
         if categoria == 1:
             cur.execute("""
-                SELECT * FROM bodega.consola WHERE id_producto = %s
+                SELECT * FROM bodega.consola WHERE codigo_producto = %s
             """, (id,))
+            data= cur.fetchone()
+
+            dictionary = {
+            "id": data[0],
+            "codigo": data[1],
+            "nombre": data[2],
+            "descripcion": data[3],
+            "precio": data[4],
+            "categoria": "Consola",
+            "marca": data[6],
+            "modelo":  data[7]
+        }
+
+
         else:
             cur.execute("""
-                SELECT * FROM bodega.videojuego WHERE id_producto = %s
+                SELECT * FROM bodega.videojuego WHERE codigo_producto = %s
             """, (id,))
+            data= cur.fetchone()
+            dictionary = {
+            "id": data[0],
+            "codigo": data[1],
+            "nombre": data[2],
+            "descripcion": data[3],
+            "precio": data[4],
+            "categoria": "Videojuego",
+            "genero": data[6],
+            "fecha_lanzamiento":  data[7],
+            "plataforma": data[8],
+            "mecanica": data[9]
+        }
 
-        return cur.fetchone()
+        return dictionary
 
 
 

@@ -19,10 +19,11 @@ def insert (data_login: Login):
     credenciales=LoginDB.ingresar(conn,data)
   
     dictionary = {
-            "id empleado": credenciales[0][0],
-            "id sucursal": credenciales[0][1],
+            "id_empleado": credenciales[0][0],
+            "id_sucursal": credenciales[0][1],
             "rol": credenciales[0][2],
-            "dato extra": credenciales[0][3]
+            "dato_extra": credenciales[0][3],
+            "nombre": credenciales[0][4]
      }
     return dictionary
    

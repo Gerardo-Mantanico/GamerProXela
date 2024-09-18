@@ -1,47 +1,55 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../service/login.service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Credencial } from '../inteface/credencial';
+import { AuthServiceService } from '../service/autoservice/auth-service.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
-  user: string ='luis@gmail.com';
-  password:  string="123456";
+export default class LoginComponent {
 
+  checkoutForm
 
-  constructor(private service: LoginService, private router: Router){}
-
-  login(): void {
-    this.service.login(this.user, this.password).subscribe({
-      next: (response: Credencial) => {
-        console.log('Login successful:', response);
-
-        // Accede a los atributos de la respuesta
-        const idEmpleado = response.id_empleado;
-        const idSucursal = response.id_sucursal;
-        const rol = response.rol;
-        const dataExtra = response['data exta']; // Accede al atributo con nombre especial
-
-        console.log('ID Empleado:', idEmpleado);
-        console.log('ID Sucursal:', idSucursal);
-        console.log('Rol:', rol);
-        console.log('Data Extra:', dataExtra);
-
-        // Aquí puedes manejar los datos, por ejemplo guardarlos en un servicio de autenticación
-
-        this.router.navigate(['/cajero']);
-      },
-      error: (err) => {
-        console.error('Login failed:', err);
-      }
-    });
+  constructor(private service: LoginService, private formBuilder: FormBuilder, private router: Router, private authService: AuthServiceService) {
+    this.checkoutForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    })
   }
-}
+
+
+  onSubmit() {
+      this.service.login(this.checkoutForm.value).subscribe({
+        next: (response: Credencial) => {
+          this.authService.saveCredentials(JSON.stringify(response));
+          
+          if(response.rol=='A'){
+             this.router.navigate(['admin']);
+          }
+          else if(response.rol=='B'){
+            this.router.navigate(['bodega']);
+          }
+          else if(response.rol=='C'){
+            this.router.navigate(["cajero"]);
+          }
+          else if (response.rol=='I'){
+            this.router.navigate([]);
+          }
+
+        },
+        error: (err) => {
+          console.error('Login failed:', err);
+        }
+      });
+    }
+  }
+
+
+

@@ -1,0 +1,29 @@
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;"> 
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="d-flex justify-content-center">
+                <span>Empleado</span>
+              </div>
+              <table class="table">
+                  <thead>
+                      <tr class="table-primary">
+                          <th scope="col">Codigo</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Cantidad</th>
+                          <th scope="col">categoria</th>
+                      </tr>
+                      <tr *ngFor="let producto of cosola">
+                        <td  scope="row" >{{ producto.codigo }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.cantidad }}</td>
+                        <td>{{producto.categoria}}</td>
+                      </tr>
+
+                  </thead>
+                  <tbody>
+                  <tr>hola</tr>
+                  </tbody>
+              </table>
+          </div>
+    </div>
+</div>

@@ -14,79 +14,64 @@
         <div class="d-flex justify-content-center">
             <span>Registro de empleado</span>
           </div>
-
+      
+     <form  [formGroup]="checkoutForm"  (ngSubmit)="onSubmit()">
            <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
-              <input type="text" class="form-control" placeholder="Nombre" aria-label="namecliente" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" placeholder="Nombre" aria-label="namecliente" aria-describedby="basic-addon1" formControlName="name">
           </div>
           <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
-              <input type="text" class="form-control" placeholder="Usuario" aria-label="namecliente" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" placeholder="Usuario" aria-label="namecliente" aria-describedby="basic-addon1" formControlName ="user">
           </div>
           <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1"><i class="material-icons">contact_mail</i></span>
-              <input type="email" class="form-control" placeholder="cliente@gmail.com" aria-label="Email" aria-describedby="basic-addon1">
+              <input type="email" class="form-control" placeholder="cliente@gmail.com" aria-label="Email" aria-describedby="basic-addon1" formControlName="email">
           </div>
           <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1"><i class="material-icons">pin_drop</i></span>
-              <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala" aria-label="Dirección" aria-describedby="basic-addon1">
+              <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala" aria-label="Dirección" aria-describedby="basic-addon1" formGroupName="address">
               <span class="input-group-text" id="basic-addon1"><i class="material-icons">phone_iphone</i></span>
-              <input type="number" class="form-control" placeholder="77667898" aria-label="Teléfono" aria-describedby="basic-addon1">
+              <input type="number" class="form-control" placeholder="77667898" aria-label="Teléfono" aria-describedby="basic-addon1" formControlName="phone">
           </div>
           <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon1"><i class="material-icons">supervisor_account</i></span>
-              <select class="form-select" aria-label="Tipo de empleado">
+              <span class="input-group-text" id="basic-addon1"><i class="material-icons">supervisor_account</i></span >
+              <select class="form-select" aria-label="Tipo de empleado" formControlName="rol">
                   <option selected>Tipo de empleado</option>
-                  <option value="1">Cajero</option>
-                  <option value="2">Bodega</option>
-                  <option value="3">Inventario</option>
-                  <option value="4">Administrador</option>
+                  <option value="C">Cajero</option>
+                  <option value="B">Bodega</option>
+                  <option value="I">Inventario</option>
+                  <option value="A">Administrador</option>
               </select>
               <span class="input-group-text" id="basic-addon1"><i class="material-icons">store</i></span>
-              <select class="form-select" aria-label="Sucursales">
-                  <option selected>Sucursales</option>
-                  <option value="1">Zona 1</option>
-                  <option value="2">Zona 3</option>
-                  <option value="3">Three</option>
-              </select>
+              <input type="text" class="form-control" aria-label="branch" aria-describedby="basic-addon1" disabled  [value]="branch">
           </div>
           <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1"><i class="material-icons">lock</i></span>
-              <input type="password" class="form-control" placeholder="*******" aria-label="Contraseña" aria-describedby="basic-addon1">
+              <input type="password" class="form-control" placeholder="*******" aria-label="Contraseña" aria-describedby="basic-addon1" formControlName="password" >
           </div>
-          <button type="button" class="btn btn-primary nput-group mb-3">Aceptar</button>
+          <button type="submit" class="btn btn-primary form-control">Guardar</button>
+        </form>
       </div>    
       <div class="col-lg-5">
         <div class="d-flex justify-content-center">
-            <span>empleado</span>
+            <span>Empleado</span>
           </div>
           <table class="table">
               <thead>
-                  <tr>
-                  
-                      <th scope="col">Usuario</th>
+                  <tr class="table-primary">
+                      <th scope="col">Codigo</th>
+                      <th scope="col">Nombre</th>
                       <th scope="col">Rol</th>
-                      <th scope="col">Sucursal</th>
                   </tr>
               </thead>
               <tbody>
-                  <tr>
-                      <td>Cristiano Ronaldo (dcristiano)</td>
-                      <td>Cajero</td>
-                      <td>Zona 2</td>
-                      <td><i class="bi bi-pen-fill"></i></td>
-                      <td><i class="bi bi-trash-fill"></i></td>
-                  </tr>
-                  <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>fat</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">3</th>
-                      <td colspan="2">Larry the Bird</td>
-                      <td>twitter</td>
+                <tr *ngFor="let user of userData">
+                    <td  scope="row" >{{ user.id_empleado }}</td>
+                    <td>{{ user.nombre }}</td>
+                    <td>{{ user.rol }}</td>
+                    <td><i class="bi bi-pen-fill"></i></td>
+                    <td><i class="bi bi-trash-fill"></i></td>
                   </tr>
               </tbody>
           </table>

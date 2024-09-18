@@ -17,14 +17,14 @@
         <div class="d-flex justify-content-center align-items-center">
           <img  class="img-fluid" src="https://i.postimg.cc/J0G8QGhW/account-circle-24dp-20153-C-FILL0-wght400-GRAD0-opsz24.png" alt="logo-user" style="width: 100px;">
         </div>
-       <form>
+        <form  [formGroup]="checkoutForm"  (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label"></label>
             <div class="input-group">
               <span class="input-group-text" id="basic-addon1">
                 <i class="material-icons">person</i>
               </span>
-              <input   type="text" class="form-control" placeholder="Username" aria-label="Username"
+              <input   type="email" class="form-control" placeholder="Username@gmail.com" aria-label="email"  formControlName="email"
                 aria-describedby="basic-addon1">
             </div>
           </div>
@@ -34,11 +34,11 @@
                 <i class="material-icons">lock</i>
               </span>
               <input   type="password" class="form-control" placeholder="password" aria-label="Username"
-                aria-describedby="basic-addon1">
+                aria-describedby="basic-addon1" formControlName="password">
             </div>
           </div>
           <div class="d-grid gap-2 col-12 mx-auto">
-            <button  (click)="login()" class="btn btn-secondary" type="button">Login</button>
+            <button  [type]="onSubmit" class="btn btn-secondary" type="button">Login</button>
           </div>
         </form>
       </div>

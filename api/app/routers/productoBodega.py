@@ -15,6 +15,7 @@ router = APIRouter(
 @router.post("/insert")
 def insert (product_data: ProductoBodega):
      data = product_data.dict() #formater dato
+     print(data)
      data.pop("id_producto_bodega"); # para quitar el id de la clase
      ProductoBodegaDB.insert_producto(conn,data)
 
@@ -23,6 +24,11 @@ def insert (product_data: ProductoBodega):
 def delete_product(id: int):
       ProductoBodegaDB.delete_product(conn,id)
       return "producto eliminado de bodega"
+
+@router.get("/{id}")
+def get_list(id: int):
+    return  ProductoBodegaDB.product_list(conn,id)
+
 
 
 

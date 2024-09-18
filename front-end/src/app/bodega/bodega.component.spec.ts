@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { BodegaComponent } from './bodega.component';
+import  BodegaComponent  from './bodega.component';
 
 describe('BodegaComponent', () => {
   let component: BodegaComponent;

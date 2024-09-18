@@ -1,0 +1,83 @@
+<div class="container">
+    <div class="header-menu">
+        <img  class="logo" src="https://i.postimg.cc/SKQdn8sV/Screenshot-2024-08-03-144901.png">
+        <span>
+            "¡Bienvenido! Complete los detalles a continuación para dar de alta a un nuevo empleado y ayudar a nuestro
+            equipo a crecer."
+        </span>
+    </div>
+    <div class="row mt-2">
+        <div class="col-lg-7">
+            <div class="d-flex justify-content-center mb-3">
+                <span >Ingreso de producto </span>
+            </div>
+            <form [formGroup]="form"  (ngSubmit)="onSubmit()">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i
+                            class="material-icons">qr_code_scanner</i></span>
+                    <input    type="text"   (keydown)="onEnter($event)"  class="form-control" placeholder="Codigo CONSOLA-78" aria-label="namecliente"
+                        aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
+                    <input type="text" class="form-control" placeholder="Nombre del producto" aria-label="nameProduct" value="{{producto.nombre}}" disabled
+                        aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">category</i></span>
+                    <input placeholder="categoria" id="categoria"  type="text" class="form-control" aria-label="branch"
+                    aria-describedby="basic-addon1"  disabled value="{{producto.categoria}}">
+
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">paid</i></span>
+                    <input placeholder="50.45" type="text" class="form-control" aria-label="branch" min="0"   value="{{producto.precio}}"  disabled
+                        aria-describedby="basic-addon1">
+
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">tag</i></span>
+                    <input placeholder="1" type="number" class="form-control" aria-label="branch"   formControlName="cantidad" 
+                        aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group mb-3 consola" *ngIf="visibleConsola">
+                    <span class="input-group-text" id="basic-addon1"><i
+                            class="material-icons">videogame_asset</i></span>
+                    <input placeholder="Marca Sony" type="text" class="form-control" aria-label="branch" value="{{producto.marca}}"
+                        aria-describedby="basic-addon1" disabled>
+
+                    <span class="input-group-text" id="basic-addon1"><i
+                            class="material-icons">videogame_asset</i></span>
+                    <input placeholder="Modelo-A35" type="text" class="form-control" aria-label="branch" value="{{producto.modelo}}" disabled
+                        aria-describedby="basic-addon1">
+                </div>
+
+                <div *ngIf="visibleVideojuego">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="material-icons">category</i></span>
+                        <input type="text" class="form-control" aria-label="branch" aria-describedby="basic-addon1" value="{{producto.categoria}}" disabled>
+
+                        <span class="input-group-text" id="basic-addon1"><i class="material-icons">event</i></span>
+                        <input type="date" class="form-control" aria-label="branch" aria-describedby="basic-addon1" value="{{producto.fecha_lanzamiento}}" disabled>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="material-icons">videogame_asset</i></span>
+                        <input placeholder="Plataforma" type="text" class="form-control" aria-label="branch" value="{{producto.plataforma}}" disabled
+                            aria-describedby="basic-addon1">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="material-icons">videogame_asset</i></span>
+                        <input placeholder="Mecanica" type="text" class="form-control" aria-label="branch" value="{{producto.mecanica}}" disabled
+                            aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">description</i></span>
+                    <textarea class="form-control " rows="8" placeholder="Descripcion de producto" name="description" disabled
+                        id="description">{{producto.descripcion}} </textarea>
+                </div>
+                <button type="submit" class="btn btn-primary form-control">Guardar</button>
+            </form>
+        </div>
+        <div class="col-lg-5 d-flex justify-content-center" >
+            <img class="img-fluid rounded" src="https://i.blogs.es/509bc7/accesorios-videojuegos-amazon-mexico/1366_2000.jpeg" alt="logo">
+          </div>          
+    </div>
+</div>

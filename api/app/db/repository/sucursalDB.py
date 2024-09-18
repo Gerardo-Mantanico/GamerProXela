@@ -1,14 +1,27 @@
+from fastapi import FastAPI, HTTPException, status # type: ignore
+import psycopg2 # type: ignore
+from psycopg2 import OperationalError, DatabaseError # type: ignore
+
 class SucursalDB:
 
     # Este metodo se encarga de registrar una sucursal
     def register_branch(self, data):
-        with self.conn.cursor() as cur:
-            cur.execute(    """
-                            INSERT INTO sucursal.sucursal( direccion, nombre, no_sucursal)
-                            VALUES (%(direccion)s, %(nombre)s, %(no_sucursal)s)
+        try:
+             with self.conn.cursor() as cur:
+                cur.execute(    """
+                            CALL sucursal.insert_sucursal (%(direccion)s, %(nombre)s, %(no_sucursal)s, %(codigo)s, %(correo)s,%(telefono)s,%(horario_apertura)s,%(horario_cierre)s)
                             """,data,
             )
-            self.conn.commit()
+                self.conn.commit()
+        except (DatabaseError, psycopg2.Error) as e:
+            if self.conn is not None:
+                self.conn.rollback()
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Database operation error")
+        
+        finally:
+                if self.conn is not None:
+                 self.conn.close()
+
 
     # Este metodo se encarga de obtener la informacion de una sucursal
     def see_branch(self, id):

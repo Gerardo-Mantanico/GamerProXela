@@ -20,8 +20,9 @@ router = APIRouter(
 def insert (user_data: Sucursal):
      data = user_data.dict() #formater dato
      data.pop("id"); # para quitar el id de la clase
-     SucursalDB.register_branch(conn,data)
      print(data)
+     SucursalDB.register_branch(conn,data)
+
 
 
 @router.delete("/delete/{id}")
@@ -33,10 +34,15 @@ def delete_branch(id: int):
 def get_branch(id:int):
      data = SucursalDB.see_branch(conn,id)
      dictionary = {
-            "id": data[0],
-            "address": data[1],
-            "name": data[2],
-            "no_branch": data[3]
+          "id": data[0],
+          "direccion": data[1],
+          "nombre": data[2],
+          "no_sucursal": data[3],
+          "codigo": data[4],
+          "correo": data[5],
+          "telefono": data[6],
+          "horario_apertura": data[7],
+          "horario_cierre": data[8]
      }
      return dictionary
 

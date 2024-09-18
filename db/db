@@ -148,41 +148,46 @@ CALL  administrador.registrar_empleado('C','Cajero1','123456',1,'cajero',7766894
 /* Funcion  login  */
 
 CREATE OR REPLACE FUNCTION administrador.login(p_correo VARCHAR(256), p_contrasena TEXT)
-RETURNS TABLE(id_empleado BIGINT, id_sucursal BIGINT, rol CHAR, dato INTEGER) AS $$
+RETURNS TABLE(id_empleado BIGINT, id_sucursal BIGINT, rol CHAR, dato BIGINT,nombre character(72)) AS $$
 DECLARE
     rol_empleado CHAR;
+	idEmpleado BIGINT;
 BEGIN
     -- Obtener el rol del empleado basado en correo y contraseña
-    SELECT e.rol INTO rol_empleado
+    SELECT e.rol, e.id_empleado INTO rol_empleado, idEmpleado
     FROM administrador.empleado e
     WHERE e.correo = p_correo AND e.contrasena = p_contrasena;
 
     -- Verificar el rol y retornar datos diferentes según el rol
     IF rol_empleado = 'B' THEN
         RETURN QUERY
-        SELECT b.id_empleado, b.id_sucursal, e.rol, b.id_bodega  
+         SELECT e.id_empleado, b.id_sucursal, e.rol, b.id_bodega, s.nombre
         FROM bodega.bodega b
-        LEFT JOIN administrador.empleado e ON b.id_empleado = e.id_empleado;
+        LEFT JOIN administrador.empleado e ON e.id_sucursal = b.id_sucursal
+		INNER JOIN sucursal.sucursal s ON s.id_sucursal = b.id_sucursal WHERE e.id_empleado=idEmpleado;
 
     ELSIF rol_empleado = 'I' THEN
         RETURN QUERY
-        SELECT   i.id_empleado, i.id_sucursal, e.rol,  i.id_estanteria 
+        SELECT   e.id_empleado, i.id_sucursal, e.rol,  i.id_estanteria, s.nombre 
         FROM inventario.estanteria i
-        LEFT JOIN administrador.empleado e ON i.id_empleado = e.id_empleado;
+        LEFT JOIN administrador.empleado e ON e.id_sucursal = i.id_sucursal
+		INNER JOIN sucursal.sucursal s ON s.id_sucursal = i.id_sucursal WHERE e.id_empleado=idEmpleado;
 
     ELSIF rol_empleado = 'C' THEN
         RETURN QUERY
-        SELECT c.id_empleado, c.id_sucursal, c.rol, c.no_caja 
-        FROM administrador.cajero c;
+        SELECT c.id_empleado, c.id_sucursal, c.rol, c.no_caja, s.nombre
+        FROM administrador.cajero c
+		INNER  JOIN sucursal.sucursal s ON s.id_sucursal = c.id_sucursal WHERE  c.id_empleado;
 
     ELSIF rol_empleado = 'A' THEN
         RETURN QUERY
-        SELECT a.id_empleado, a.id_sucursal, a.rol,NULL::INTEGER
-        FROM administrador.empleado a;
+       	SELECT a.id_empleado, a.id_sucursal, a.rol,NULL::BIGINT, s.nombre
+        FROM administrador.empleado a
+		INNER JOIN sucursal.sucursal s ON s.id_sucursal = a.id_sucursal  WHERE a.id_empleado=idEmpleado;
 
     ELSE
         RETURN QUERY
-        SELECT NULL::TEXT AS id_empleado, NULL::TEXT AS id_sucursal, NULL::TEXT AS rol, 'Rol desconocido' AS datos;
+        SELECT NULL::BIGINT AS id_empleado, NULL::BIGINT AS id_sucursal, NULL::BIGINT AS rol, 'Rol desconocido' AS datos ,NULL::VARCHAR(75);
     END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -222,5 +227,91 @@ BEGIN
 END;
 $$;
 
+/*funcion para insertar y retornar id */
 
-CREATE VIEW
+CREATE OR REPLACE FUNCTION sucursal.inser_sucursal(
+    p_direccion varchar(150),
+    p_nombre varchar(72),
+    p_no_sucursal integer,
+    p_codigo varchar(72),
+    p_correo varchar(150),
+    p_telefono varchar(20), -- Cambiado a varchar para manejar formatos de teléfono
+    p_horario_apertura time,
+    p_horario_cierre time
+)
+RETURNS INTEGER AS $$
+DECLARE
+    id INTEGER;
+BEGIN
+    INSERT INTO sucursal.sucursal (
+        direccion, nombre, no_sucursal, codigo, correo, telefono, horario_apertura, horario_cierre
+    )
+    VALUES (
+        p_direccion, 
+        p_nombre,
+        p_no_sucursal,
+        p_codigo,
+        p_correo,
+        p_telefono,
+        p_horario_apertura,
+        p_horario_cierre
+    )
+    RETURNING id_sucursal INTO id; -- Asegúrate de que el nombre de la columna es correcto
+    
+    RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE PROCEDURE  sucursal.insert_sucursal(
+    p_direccion VARCHAR(150),
+    p_nombre VARCHAR(72),
+    p_no_sucursal INTEGER,
+    p_codigo VARCHAR(72),
+    p_correo VARCHAR(150),
+    p_telefono VARCHAR(20),
+    p_horario_apertura TIME,
+    p_horario_cierre TIME,
+    OUT p_id_sucursal INTEGER  
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+    INSERT INTO sucursal.sucursal (
+        direccion, nombre, no_sucursal, codigo, correo, telefono, horario_apertura, horario_cierre
+    )
+    VALUES (
+        p_direccion, 
+        p_nombre,
+        p_no_sucursal,
+        p_codigo,
+        p_correo,
+        p_telefono,
+        p_horario_apertura,
+        p_horario_cierre
+    )
+    RETURNING id_sucursal INTO p_id_sucursal; 
+	
+	INSERT INTO bodega.bodega(id_empleado, id_sucursal)
+	VALUES (null,id_sucursal  );
+
+	INSERT INTO administrador.admin(id_empleado, id_sucursal)
+	VALUES (null,id_sucursal  );
+
+	INSERT INTO cajero.caja(id_empleado, id_sucursal)
+	VALUES (null,id_sucursal  );
+
+	INSERT INTO inventario.estanteria(id_empleado, id_sucursal)
+	VALUES (null,id_sucursal  );
+	
+END;
+$$;
+
+
+/*
+     SELECT b.id_empleado, b.id_sucursal, e.rol, b.id_bodega, s.nombre  
+        FROM bodega.bodega b
+        LEFT JOIN administrador.empleado e ON b.id_empleado = e.id_empleado
+		left join sucursal.sucursal s on s.id_sucursal =  e.id_sucursal
+		*/

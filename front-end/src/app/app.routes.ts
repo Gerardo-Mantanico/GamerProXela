@@ -1,9 +1,15 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', loadComponent:()=> import('./login/login.component'),
+    children:[
+
+
+        
+    ]
+   },
 
   {
     path: 'cajero', loadComponent: () => import('./cajero/cajero.component'),
@@ -37,4 +43,15 @@ export const routes: Routes = [
           }
       ]
   },
+  {
+    path: 'bodega', loadComponent: () =>import ('./bodega/bodega.component'),
+    children:[
+        {
+          path: "ingresarProductos", loadComponent:() => import('./bodega/registrar-producto/registrar-producto.component')
+        },
+        {
+          path: "producto", loadComponent : () =>import('./bodega/producto-bodega/producto-bodega.component')
+        }
+    ]
+  }
 ];

@@ -21,7 +21,7 @@ def insert (product_data: Consola):
 
 
 @router.get("/{id}")
-def get_produc(id:int):
+def get_produc(id:str):
      data = ProductoDB.see_producto(conn, id)
      return data
 

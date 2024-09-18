@@ -1,0 +1,125 @@
+<div class="container">
+    <div class="header-menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person-circle"
+            viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+            <path fill-rule="evenodd"
+                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+        </svg>
+        <span>
+            "¡Bienvenido! Complete los detalles a continuación para dar de alta a un nuevo empleado y ayudar a nuestro
+            equipo a crecer."
+        </span>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-7">
+
+            <div class="d-flex justify-content-center">
+                <span>Registro de empleado</span>
+            </div>
+            <form [formGroup]="form">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i
+                            class="material-icons">qr_code_scanner</i></span>
+                    <input type="text" class="form-control" placeholder="Codigo CONSOLA-78" aria-label="namecliente"
+                        aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
+                    <input type="text" class="form-control" placeholder="Nombre del producto" aria-label="nameProduct"
+                        aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">category</i></span>
+                    <select class="form-select" aria-label="Tipo de empleado" id="categoria"
+                        formControlName="categoria">
+                        <option *ngFor="let categoria of categorias" [value]="categoria">{{categoria }}</option>
+                    </select>
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">paid</i></span>
+                    <input placeholder="50.45" type="number" class="form-control" aria-label="branch" min="0"
+                        aria-describedby="basic-addon1">
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">tag</i></span>
+                    <input placeholder="1" type="number" class="form-control" aria-label="branch" min="0"
+                        aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group mb-3 consola" *ngIf="visibleConsola">
+                    <span class="input-group-text" id="basic-addon1"><i
+                            class="material-icons">videogame_asset</i></span>
+                    <input placeholder="Marca Sony" type="text" class="form-control" aria-label="branch"
+                        aria-describedby="basic-addon1">
+                    <span class="input-group-text" id="basic-addon1"><i
+                            class="material-icons">videogame_asset</i></span>
+                    <input placeholder="Modelo-A35" type="text" class="form-control" aria-label="branch"
+                        aria-describedby="basic-addon1">
+                </div>
+
+                <div *ngIf="visibleVideojuego">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="material-icons">category</i></span>
+                        <select class="form-select" aria-label="Tipo de empleado" formControlName="rol">
+                            <option selected>Categoria de videojuego</option>
+                            <option value="1">Acción</option>
+                            <option value="2">Aventura</option>
+                            <option value="3">Rol (RPG)</option>
+                            <option value="4">Estrategia</option>
+                            <option value="5">Simulación</option>
+                            <option value="6">Deportes</option>
+                            <option value="7">Carreras</option>
+                            <option value="8">Puzzle</option>
+                            <option value="9">Terror</option>
+                            <option value="10">Música y Ritmo</option>
+                            <option value="11">Sandbox</option>
+                            <option value="12">Aventura Interactiva</option>
+                            <option value="13">Plataformas</option>
+                            <option value="14">Beat 'em Up</option>
+                            <option value="15">Juego de Cartas</option>
+                            <option value="16">Roguelike/Roguelite</option>
+                            <option value="17">Idle</option>
+                            <option value="18">Battle Royale</option>
+                            <option value="19">MOBA (Multiplayer Online Battle
+                                Arena)</option>
+                            <option value="20">Narrativo</option>
+                            <option value="21">Metroidvania</option>
+                            <option value="22">Real-Time Tactics (RTT)</option>
+                            <option value="23">4X (Explorar, Expandir, Explotar,
+                                Exterminar)</option>
+                            <option value="24">Juego de Supervivencia</option>
+                            <option value="25">Simulación de Negocios</option>
+                            <option value="26">Simulación de
+                                Agricultura</option>
+                            <option value="27">Juegos de Palabras</option>
+                            <option value="28">Juegos de Sudoku</option>
+                            <option value="29">Juegos de Baile</option>
+                            <option value="30">Juegos de Ritmo</option>
+                            <option value="31">Horror de Supervivencia</option>
+                            <option value="32">Visual Novels</option>
+
+                        </select>
+
+                        <span class="input-group-text" id="basic-addon1"><i class="material-icons">event</i></span>
+                        <input type="date" class="form-control" aria-label="branch" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="material-icons">videogame_asset</i></span>
+                        <input placeholder="Plataforma" type="text" class="form-control" aria-label="branch"
+                            aria-describedby="basic-addon1">
+                        <span class="input-group-text" id="basic-addon1"><i
+                                class="material-icons">videogame_asset</i></span>
+                        <input placeholder="Mecanica" type="text" class="form-control" aria-label="branch"
+                            aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="material-icons">description</i></span>
+                    <textarea class="form-control " rows="8" placeholder="Descripcion de producto" name="description"
+                        id="description"> </textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary form-control">Guardar</button>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -12,11 +12,7 @@ export class LoginService {
   
   constructor( private httpClient: HttpClient, private router: Router){ }
 
-  login(email: string, password: string):Observable<any>{
-    return this.httpClient.post<any>(this.LOGIN_URL,
-      {
-        "email": "luis@gmail.com",
-        "password": "123456"
-      })
+  login(credencial: any):Observable<any>{
+    return this.httpClient.post<any>(this.LOGIN_URL,credencial)
   }
 }
