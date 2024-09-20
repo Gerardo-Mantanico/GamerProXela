@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="row mt-5">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1">
+          <i class="material-icons">search</i>
+        </span>
+        <input type="search" class="form-control" placeholder="Fifa 2024 pc" aria-label="Username"
+          aria-describedby="basic-addon1">
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col-lg-7">
+        <table class="table table-hover table-borderless">
+          <thead>
+              <tr class="table-primary">
+                  <th scope="col">Codigo</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Cantidad</th>
+                  <th scope="col">categoria</th>
+              </tr> 
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of videojuego; let i = index"  (click)="details(i, 2)" >
+              <td  scope="row" >{{ producto.codigo }}</td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.cantidad }}</td>
+              <td>{{producto.categoria}}</td>
+              <td (click)="insertInvet(i, 2, producto.cantidad)"><i class="material-icons add">playlist_add</i></td>
+            </tr>
+
+
+            <tr *ngFor="let product of consola; let i = index" (click)="details(i,1)">
+              <td  scope="row" >{{ product.codigo }}</td>
+              <td>{{ product.nombre }}</td>
+              <td>{{ product.cantidad }}</td>
+              <td>{{product.categoria}}</td>
+              <td (click)="insertInvet(i, 1, product.cantidad)" ><i class="material-icons add">playlist_add</i></td>
+            </tr>
+          </tbody>
+      </table>
+      </div>
+      <div class="col-lg-5">
+        <h1>{{detailProducto.nombre}}</h1>
+        <samp><strong>Cantidad:</strong>{{detailProducto.cantidad}}</samp> <br>
+       <span>¡Disponible!</span>
+        <h2>{{detailProducto.precio}}</h2>
+        <samp><strong>Categoria: </strong>{{detailProducto.categoria}}</samp> <br>
+
+        <div class="consolsa" *ngIf="estadoConsola">
+        <samp><strong>Modelo: </strong>{{detailProducto.modelo}}</samp> <br>
+        <samp><strong>Marca: </strong>{{detailProducto.marca}}</samp> <br><br>
+        </div>
+      
+        <div class="videojuego" *ngIf="estadoVideojugo">
+          <samp><strong>Genero: </strong>{{detailProducto.genero}}</samp> <br>
+          <samp><strong>Fecha de lanzamiento: </strong>{{detailProducto.fecha_lanzamiento}}</samp> <br>
+          <samp><strong>Plaforma: </strong>{{detailProducto.plataforma}}</samp> <br>
+          <samp><strong>Mecanica: </strong>{{detailProducto.mecanica}}</samp> <br><br>
+        </div>
+        <p>Especificaciones</p>
+        <p>
+          {{detailProducto.descripcion}}
+        </p>
+        <samp><strong>Numero de pasillo: </strong>A113</samp>
+      </div>
+    </div>
+  </div>
+  

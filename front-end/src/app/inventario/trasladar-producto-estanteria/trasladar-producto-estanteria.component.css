@@ -1,0 +1,9 @@
+
+
+.add:hover{
+    color: red;
+    cursor: pointer;
+}
+.table tr:hover{
+    background-color: antiquewhite;
+}

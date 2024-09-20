@@ -6,7 +6,7 @@ export const routes: Routes = [
   { path: 'login', loadComponent:()=> import('./login/login.component'),
     children:[
 
-
+      
         
     ]
    },
@@ -53,5 +53,18 @@ export const routes: Routes = [
           path: "producto", loadComponent : () =>import('./bodega/producto-bodega/producto-bodega.component')
         }
     ]
+  },
+  {
+    path: 'inventario', loadComponent: ()=>import ('./inventario/inventario.component'),
+    children:[
+      {
+        path: 'trasladarProducto', loadComponent: ()=> import ('./inventario/trasladar-producto-estanteria/trasladar-producto-estanteria.component')
+      },
+      {
+        path:'productos',loadComponent: ()=> import ('./inventario/productos-estanteria/productos-estanteria.component')
+      }
+    ]
+    
   }
+
 ];

@@ -6,3 +6,4 @@ class ProdutoEstanteria(BaseModel):
     id_estanteria: int
     id_producto_bodega: int
     no_pasillo: str
+    cantidad: int

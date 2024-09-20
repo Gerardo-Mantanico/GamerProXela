@@ -33,5 +33,6 @@ def update (data_producto : ProdutoEstanteria, id: int):
      ProductosEstanteriaDB.update_product(conn,data)
      return "producto actualizado"
 
-
-
+@router.get("/list/{id}")
+def get_list(id:int):
+      return ProductosEstanteriaDB.list_product(conn,id)

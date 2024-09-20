@@ -3,9 +3,7 @@ class ProductoBodegaDB:
         with self.conn.cursor() as cur:
             cur.execute(
                 """
-                INSERT INTO bodega.producto_bodega(
-	            id_bodega, id_producto, cantidad)
-	            VALUES (%(id_bodega)s, %(id_producto)s, %(cantidad)s);
+                CALL bodega.inser_producto_bodega(%(id_bodega)s, %(id_producto)s, %(cantidad)s)
                 """,
                 data,
             )
@@ -71,7 +69,7 @@ class ProductoBodegaDB:
             # Primera consulta para Consolas
             cur.execute(
                 """
-             SELECT bc.*, pb.cantidad,pb.id_bodega
+             SELECT bc.*, pb.cantidad,pb.id_bodega,pb.id_producto_bodega
              FROM bodega.producto_bodega pb
              INNER JOIN bodega.consola bc ON pb.id_producto = bc.id_producto
              WHERE pb.id_bodega = %s
@@ -80,33 +78,39 @@ class ProductoBodegaDB:
                 (id_bodega,),
             )
             #resolver el error 
-            data = cur.fetchone()
-            consola = {
-                "id": data[0],
-                "codigo": data[1],
-                "nombre": data[2],
-                "descripcion": data[3],
-                "precio": data[4],
-                "categoria": "Consola",
-                "marca": data[6],
-                "modelo": data[7],
-                "cantidad": data[8],
-                "bodega": data[9],
-            }
+            data = []
+            data = cur.fetchall()
+            consolas=[]
+            for row in  data:
+                consola = {
+                    "id": row[0],
+                    "codigo": row[1],
+                    "nombre": row[2],
+                    "descripcion": row[3],
+                    "precio": row[4],
+                    "categoria": "Consola",
+                    "marca": row[6],
+                    "modelo": row[7],
+                    "cantidad": row[8],
+                    "bodega": row[9],
+                    "id_producto_bodega" : row [10]
+                }
+                consolas.append(consola)
 
             # Segunda consulta para Videojuegos
             cur.execute(
                 """
-                    SELECT  bv.*, pb.cantidad, pb.id_bodega FROM bodega.producto_bodega pb
+                    SELECT  bv.*, pb.cantidad, pb.id_bodega ,pb.id_producto_bodega
+                    FROM bodega.producto_bodega pb
                     INNER JOIN bodega.videojuego bv ON pb.id_producto = bv.id_producto 
                     WHERE pb.id_bodega = %s
                 """,
                 (id_bodega,),
             )
-            data = cur.cur.fetchall()
-            print(data)
+            data = []
+            data = cur.fetchall()
             videojuegos = []
-            for row in data:
+            for row in  data:
                     videojuego = {
                         "id": row[0],
                         "codigo": row[1],
@@ -120,7 +124,7 @@ class ProductoBodegaDB:
                         "mecanica": row[9],
                         "cantidad": row[10],
                         "bodega": row[11],
+                        "id_producto_bodega" : row [12]
                     }
-            videojuegos.append(videojuego)
-
-        return {"consola": consola, "videojuego": videojuegos}
+                    videojuegos.append(videojuego)
+        return {"consola": consolas, "videojuego": videojuegos}

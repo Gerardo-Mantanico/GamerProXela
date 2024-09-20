@@ -40,7 +40,7 @@ export default class LoginComponent {
             this.router.navigate(["cajero"]);
           }
           else if (response.rol=='I'){
-            this.router.navigate([]);
+            this.router.navigate(['inventario/trasladarProducto']);
           }
 
         },

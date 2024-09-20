@@ -17,6 +17,7 @@ li:hover{
     background-color: white;
     color: #20153c;
     border-radius: 8px;
+    cursor: pointer;
 }
 .py-3{
     display: flex;

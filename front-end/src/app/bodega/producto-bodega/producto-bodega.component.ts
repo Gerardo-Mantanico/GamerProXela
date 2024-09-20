@@ -14,7 +14,9 @@ export default class ProductoBodegaComponent {
   credencial: any
   cosola: any[] = [];
   videojuego: any[]=[];
-  productos: any
+  productos: any;
+  v: any;
+
   constructor(private Productoservice: ProductosService, private authservice: AuthServiceService){
     this.getProduc();
   }
@@ -22,9 +24,9 @@ export default class ProductoBodegaComponent {
     this.credencial= this.authservice.getCredentials()!;
     this.Productoservice.getListProduct(this.credencial.dato_extra).subscribe({
       next: (response: any) =>{
-         this.productos= response;
-          console.log(this.productos.videojuego)
-         // this.cosola=this.productos.consola;
+        this.videojuego=response.videojuego;
+        console.log(this.videojuego)
+        this.cosola= response.consola
       },
       error: (error) =>{
         console.log(error)

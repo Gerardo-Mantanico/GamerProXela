@@ -1,12 +1,22 @@
 import { Component } from '@angular/core';
+import {Router, RouterLink, RouterOutlet } from '@angular/router';
+import { AuthServiceService } from '../service/autoservice/auth-service.service';
 
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './inventario.component.html',
   styleUrl: './inventario.component.css'
 })
-export class InventarioComponent {
+export default  class InventarioComponent {
+  
+constructor(private  service: AuthServiceService, private router: Router){}
+
+  closeSession(){
+    this.service.removeCredentials();
+    this.router.navigate(['login']);
+  }
+
 
 }

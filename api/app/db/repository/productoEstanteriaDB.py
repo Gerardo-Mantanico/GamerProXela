@@ -5,8 +5,8 @@ class ProductosEstanteriaDB():
             cur.execute(
                 """
                 INSERT INTO inventario.estanteria_producto(
-	            id_estanteria, id_producto_bodega, no_pasillo)
-	            VALUES ( %(id_estanteria)s, %(id_producto_bodega)s, %(no_pasillo)s)
+	            id_estanteria, id_producto_bodega, no_pasillo, cantidad)
+	            VALUES ( %(id_estanteria)s, %(id_producto_bodega)s, %(no_pasillo)s, %(cantidad)s)
                 """,data,
             )
             self.conn.commit()
@@ -34,6 +34,32 @@ class ProductosEstanteriaDB():
             data,
         )
         self.conn.commit()
+
+    def list_product(self, id):
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """
+                    SELECT  * from inventario.productos_estanteria where id_estanteria=%s
+                """,(id,)
+            )
+            data = []
+            data = cur.fetchall()
+            productos = []
+            for row in  data:
+                    producto = {
+                        "id_producto_estanteria": row[0],
+                        "id_producto": row[5],
+                        "codigo": row[6],
+                        "nombre": row[7],
+                        "descripcion": row[8],
+                        "precio": row[9],
+                        "categoria": row[10],
+                        "no_pasillo": row[3],
+                        "existencia": row[4],
+                    }
+                    productos.append(producto)
+        return {"productos": productos}
+    
 
         
     

@@ -1,1 +1,37 @@
-<p>inventario works!</p>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0  container-menu">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto mt-5 text-white text-decoration-none">
+                    <img class="img-fluid" src="https://i.postimg.cc/SKQdn8sV/Screenshot-2024-08-03-144901.png">
+                </a>
+                <ul class=" flex-column mb-sm-auto mb-0 " id="menu">
+                    <li class="nav-item" routerLink="trasladarProducto">
+                        <i class="fs-4 bi-cloud-arrow-up"></i>
+                        <span class="ms-1 d-none d-sm-inline">Ingresar productos</span>
+                    </li>
+                    <li routerLink="productos" class="nav-item">
+                        <i class="fs-4 bi-shop-window"></i>
+                        <span class="ms-1 d-none d-sm-inline">Productos en estanteria</span>
+                    </li>
+                </ul>
+                <hr>
+                <div class="dropdown pb-4">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30"
+                            class="rounded-circle">
+                        <span class="d-none d-sm-inline mx-1">Luis Gerardo</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
+
+                        <li><a class="dropdown-item" (click)="closeSession()">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class=" col-lg-10 ontainer-main" id="container-main">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
