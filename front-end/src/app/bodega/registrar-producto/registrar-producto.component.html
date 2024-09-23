@@ -10,7 +10,7 @@
             <div class="d-flex justify-content-center mb-3">
                 <span >Ingreso de producto </span>
             </div>
-            <form [formGroup]="form"  (ngSubmit)="onSubmit()">
+           
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i
                             class="material-icons">qr_code_scanner</i></span>
@@ -22,6 +22,7 @@
                     <input type="text" class="form-control" placeholder="Nombre del producto" aria-label="nameProduct" value="{{producto.nombre}}" disabled
                         aria-describedby="basic-addon1">
                 </div>
+                <form [formGroup]="form"  (ngSubmit)="onSubmit()">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i class="material-icons">category</i></span>
                     <input placeholder="categoria" id="categoria"  type="text" class="form-control" aria-label="branch"
@@ -30,9 +31,9 @@
                     <span class="input-group-text" id="basic-addon1"><i class="material-icons">paid</i></span>
                     <input placeholder="50.45" type="text" class="form-control" aria-label="branch" min="0"   value="{{producto.precio}}"  disabled
                         aria-describedby="basic-addon1">
-
+                    
                     <span class="input-group-text" id="basic-addon1"><i class="material-icons">tag</i></span>
-                    <input placeholder="1" type="number" class="form-control" aria-label="branch"   formControlName="cantidad" 
+                    <input placeholder="1" type="number" class="form-control" aria-label="branch"   formControlName="cantidad"  min="1"
                         aria-describedby="basic-addon1">
                 </div>
 

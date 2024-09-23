@@ -34,10 +34,10 @@ export default class LoginComponent {
              this.router.navigate(['admin']);
           }
           else if(response.rol=='B'){
-            this.router.navigate(['bodega']);
+            this.router.navigate(['bodega/ingresarProductos']);
           }
           else if(response.rol=='C'){
-            this.router.navigate(["cajero"]);
+            this.router.navigate(["cajero/venta"]);
           }
           else if (response.rol=='I'){
             this.router.navigate(['inventario/trasladarProducto']);

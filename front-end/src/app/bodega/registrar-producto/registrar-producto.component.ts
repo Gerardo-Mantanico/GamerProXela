@@ -22,16 +22,15 @@ export default class RegistrarProductoComponent {
   private inputElement: any;
 
   constructor(private formBuilder: FormBuilder, private service: ProductosService, private authservie: AuthServiceService) {
-
+    this.form = this.formBuilder.group({
+      cantidad: ['', [Validators.required]]
+    });
   }
 
   onEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
-       this.inputElement = event.target as HTMLInputElement;
+      this.inputElement = event.target as HTMLInputElement;
       const inputValue = this.inputElement.value;
-      this.form = this.formBuilder.group({
-        cantidad: ['', [Validators.required]]
-      });
       this.getProduct(inputValue)
     }
   }
@@ -51,11 +50,27 @@ export default class RegistrarProductoComponent {
   getProduct(codigo: string) {
     this.service.get(codigo).subscribe(
       data => {
-        console.log('Datos obtenidos:', data);
-        this.producto = data;
-        this.onChanges(data.categoria);
+       Swal.fire({
+            title: 'Cargando...',
+            text: 'Por favor espera.',
+            allowOutsideClick: false, // Deshabilitar el clic fuera para cerrar
+            timer:400,
+            didOpen: () => {
+              Swal.showLoading(); // Mostrar el loader
+            }
+          });
+          console.log('Datos obtenidos:', data);
+          this.producto = data;
+          this.onChanges(data.categoria);
       },
       error => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "No existe ningún producto",
+          showConfirmButton: false,
+          timer: 1500
+        });
         console.error('Error en la solicitud:', error);
       }
     );
@@ -99,13 +114,13 @@ export default class RegistrarProductoComponent {
 
   clear() {
     this.producto.nombre = ""
-    this.producto.cantidad = ""
+    this.producto.cantidad = " "
     this.producto.precio = ""
     this.producto.categoria = ""
     this.producto.descripcion = " "
     this.visibleConsola = false;
     this.visibleVideojuego = false;
-    this.inputElement.value=""
+    this.inputElement.value = ""
   }
 }
 

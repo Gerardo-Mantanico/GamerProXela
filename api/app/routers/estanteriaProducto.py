@@ -1,6 +1,7 @@
 from fastapi import APIRouter,HTTPException # type: ignore
 from app.db.repository.productoEstanteriaDB import  ProductosEstanteriaDB
 from app.models.productoEstanteria import ProdutoEstanteria
+from app.models.productoEstanteria import ProductoSearch
 conn = None
 
 
@@ -36,3 +37,8 @@ def update (data_producto : ProdutoEstanteria, id: int):
 @router.get("/list/{id}")
 def get_list(id:int):
       return ProductosEstanteriaDB.list_product(conn,id)
+
+@router.post("/producto-estanteria")
+def get_producto (data_producto: ProductoSearch):
+    data= data_producto.dict()
+    return ProductosEstanteriaDB.list_product_estanteria(conn,data)

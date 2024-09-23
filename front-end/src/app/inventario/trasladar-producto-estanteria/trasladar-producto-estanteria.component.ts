@@ -19,6 +19,7 @@ export default class TrasladarProductoEstanteriaComponent {
   consola: any[] = [];
   videojuego: any[] = [];
   productos: any;
+  pasillos!: any[];
   public detailProducto: any;
   public estadoVideojugo = false;
   public estadoConsola = false;
@@ -26,7 +27,7 @@ export default class TrasladarProductoEstanteriaComponent {
 
   constructor(private Productoservice: ProductosService, private authservice: AuthServiceService, private productoestanteria: ProductoEstanteriaService) {
     this.getProduc();
-   
+    this.getNoPasillos();
   }
   
   getProduc() {
@@ -34,7 +35,6 @@ export default class TrasladarProductoEstanteriaComponent {
     this.Productoservice.getListProduct(19).subscribe({
       next: (response: any) => {
         this.videojuego = response.videojuego;
-        console.log(this.videojuego)
         this.consola = response.consola
         this.details(0, 2)
       },
@@ -45,7 +45,6 @@ export default class TrasladarProductoEstanteriaComponent {
   }
 
   details(indice: number, tipo: number) {
-    console.log(indice + "   " + tipo)
     if(tipo==1){
       this.detailProducto = this.consola[indice]
       this.estadoConsola=true;
@@ -60,16 +59,23 @@ export default class TrasladarProductoEstanteriaComponent {
 
 
   async insertInvet(indice: number, tipo: number, cantidadMax: number) {
+    let opcionesHTML = '';
+    for (const pasillo of this.pasillos) {
+      opcionesHTML += `<option value="${pasillo.id_pasillo}">Pasillo ${pasillo.no}: ${pasillo.descripcion}</option>`;
+    }
+
     const { value: result } = await Swal.fire({
       title: 'Ingresar producto a estantería',
       html: `
         <input id="swal-input1" class="swal2-input" placeholder="Cantidad" type="number" required  min="1">
-        <input id="swal-input2" class="swal2-input" placeholder="No. de pasillo" type="text" required>
+        <select id="select" class="swal2-input">
+          ${opcionesHTML}
+        </select>
       `,
       focusConfirm: false,
       preConfirm: () => {
         const input1 = (<HTMLInputElement>document.getElementById('swal-input1')).value;
-        const input2 = (<HTMLInputElement>document.getElementById('swal-input2')).value;
+        const input2 = (<HTMLInputElement>document.getElementById('select')).value;
         return { cantidad: input1, no_pasillo: input2 };
       },
       showCancelButton: true,
@@ -77,13 +83,19 @@ export default class TrasladarProductoEstanteriaComponent {
   
     if (result) {
       const cantidadIngresada = parseInt(result.cantidad);
-      if (  cantidadIngresada>0 && cantidadIngresada<=cantidadMax  && result.no_pasillo!=null ) {
+      const no_pasillo = parseInt(result.no_pasillo);
+      if (  cantidadIngresada>0 && cantidadIngresada<=cantidadMax  && no_pasillo!=null ) {
 
          if(tipo==1){
-          this.inserEstanteria(this.consola[indice].id_producto_bodega ,result.no_pasillo,cantidadIngresada)
+          this.inserEstanteria(this.consola[indice].id, no_pasillo,cantidadIngresada)
+            console.log(this.consola[indice].cantidad-cantidadIngresada)
+            this.consola[indice].cantidad = this.consola[indice].cantidad-cantidadIngresada;
+
          }
          else{
-          this.inserEstanteria(this.videojuego[indice].id_producto_bodega ,result.no_pasillo,cantidadIngresada)
+          this.inserEstanteria(this.videojuego[indice].id ,no_pasillo,cantidadIngresada)
+          this.videojuego[indice].cantidad =  this.videojuego[indice].cantidad-cantidadIngresada;
+          console.log(this.videojuego[indice].cantidad)
          }
         Swal.fire(`Cantidad ingresada: ${result.cantidad}, Producto: ${result.producto}`);
       }
@@ -95,12 +107,12 @@ export default class TrasladarProductoEstanteriaComponent {
   }  
 
 
-  inserEstanteria(id: number, no_pasillo: string,cantidad: number){
+  inserEstanteria(id: number, no_pasillo: number,cantidad: number){
     this.productoestanteria.insertProduct(
         {
           "id_estanteria": this.credencial.dato_extra,
-          "id_producto_bodega": id,
-          "no_pasillo": no_pasillo,
+          "id_producto": id,
+          "id_pasillo": no_pasillo,
           "cantidad": cantidad
         }
     ).subscribe({
@@ -122,6 +134,17 @@ export default class TrasladarProductoEstanteriaComponent {
         });
       },
       error: (err)=>{
+      }
+    })
+  }
+
+  getNoPasillos(){
+    this.productoestanteria.getpasillos(this.credencial.id_sucursal).subscribe({
+      next: (response)=>{
+        this.pasillos=response.pasillo;
+      },
+      error: (error)=>{
+
       }
     })
   }

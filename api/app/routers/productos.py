@@ -1,9 +1,8 @@
 from fastapi import APIRouter,HTTPException # type: ignore
 from app.db.repository.productoDB import ProductoDB
 from app.models.productos import Videojuegos , Consola
+from fastapi import FastAPI, HTTPException, status # type: ignore
 conn = None
-
-
 
 router = APIRouter(
     prefix="/product",
@@ -23,7 +22,14 @@ def insert (product_data: Consola):
 @router.get("/{id}")
 def get_produc(id:str):
      data = ProductoDB.see_producto(conn, id)
-     return data
+     if data is None:
+            raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+     else:
+        return data
+
 
 @router.get("/")
 def get_list_product():

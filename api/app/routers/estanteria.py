@@ -33,8 +33,9 @@ def update(estateria_data: Estanteria, id:int):
       EstanteriaDB.update(conn,data)
       return "Estanteria registrada"
       
-
-
+@router.get("/pasillo/{id}")
+def get_pasillo(id:int):
+     return EstanteriaDB.no_pasillo(conn, id)
 
 
 

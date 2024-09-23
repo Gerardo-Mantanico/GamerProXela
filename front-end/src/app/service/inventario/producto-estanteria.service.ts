@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,12 @@ export class ProductoEstanteriaService {
   }
   getProductEstanteria(id: number){
      return this.httpClient.get<any>(this.PRODUCT_URL+"list/"+id)
+  }
+  getpasillos(id:number){
+    return this.httpClient.get<any>("http://0.0.0.0:8080/estanteria/pasillo/"+id)
+  }
+  searchProduct(producto : any):Observable<any>{
+    console.log(producto)
+    return this.httpClient.post<any>(this.PRODUCT_URL+"producto-estanteria",producto)
   }
 }

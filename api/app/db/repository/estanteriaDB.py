@@ -34,3 +34,27 @@ class EstanteriaDB:
             data,
         )
         self.conn.commit()
+
+
+    
+    def no_pasillo(self, id):
+        try:
+            with self.conn.cursor() as cur:
+                cur.execute("SELECT numero, descripcion, id_pasillo FROM  inventario.pasillo WHERE id_sucursal=%s", (id,))
+                data = []
+                data = cur.fetchall()
+                pasillos = []
+                for row in  data:
+                    pasillo = {
+                        "no": row[0],
+                        "descripcion": row[1],
+                        "id_pasillo": row[2]
+                       
+                    }
+                    pasillos.append(pasillo)
+                return {"pasillo": pasillos}
+        except Exception as e:
+            self.conn.rollback()  # revertir la transacción
+            raise e    
+
+

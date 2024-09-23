@@ -50,12 +50,12 @@ CREATE TABLE IF NOT EXISTS bodega.bodega
 
 CREATE TABLE IF NOT EXISTS bodega.producto_bodega(
  id_producto_bodega serial Not NULL,
- id_bodega integer NOT NULL,
- id_producto integer NOT NULL,
+ id_bodega BIGINT NOT NULL,
+ id_producto BIGINT NOT NULL,
  cantidad int NOT NULL,
  CONSTRAINT "producto_bodega_pkey" PRIMARY KEY (id_producto_bodega),
- CONSTRAINT "fk_producto" FOREIGN KEY (id_producto) REFERENCES bodega.producto(id),
- CONSTRAINT "fk_bodega" FOREIGN KEY (id_bodega) REFERENCES bodega.bodega(id)
+ CONSTRAINT "fk_producto" FOREIGN KEY (id_producto) REFERENCES bodega.producto(id_producto),
+ CONSTRAINT "fk_bodega" FOREIGN KEY (id_bodega) REFERENCES bodega.bodega(id_bodega)
 );
 
 /*Administrador*/
@@ -216,7 +216,7 @@ BEGIN
             RAISE NOTICE 'Consola: %', v_result;
         END LOOP;
     ELSE
-        -- Consultar y devolver información de videojuego
+        
         FOR v_result IN
             SELECT * FROM bodega.videojuego
             WHERE id_producto = p_id_producto
@@ -235,7 +235,7 @@ CREATE OR REPLACE FUNCTION sucursal.inser_sucursal(
     p_no_sucursal integer,
     p_codigo varchar(72),
     p_correo varchar(150),
-    p_telefono varchar(20), -- Cambiado a varchar para manejar formatos de teléfono
+    p_telefono varchar(20), 
     p_horario_apertura time,
     p_horario_cierre time
 )
@@ -256,8 +256,7 @@ BEGIN
         p_horario_apertura,
         p_horario_cierre
     )
-    RETURNING id_sucursal INTO id; -- Asegúrate de que el nombre de la columna es correcto
-    
+    RETURNING id_sucursal INTO id; 
     RETURN id;
 END;
 $$ LANGUAGE plpgsql;
@@ -309,7 +308,6 @@ END;
 $$;
 
 /*metodo para insertar  productos a la bodega*/
-
 CREATE PROCEDURE bodega.inser_producto_bodega(p_id_bodega BIGINT, p_id_producto BIGINT, p_cantidad BIGINT)
 LANGUAGE plpgsql
 AS $$
@@ -333,13 +331,32 @@ BEGIN
     END IF;
 END $$;
 
-/*mover producto de bodega a inventario*/
 
+/*vista para ver los productos de estanteria */
+CREATE OR REPLACE VIEW inventario.productos_estanteria AS
+select ep.*, p.*, ip.numero, ip.descripcion as descripcion_pasillo from inventario.estanteria_producto ep
+INNER JOIN bodega.producto_bodega pb ON pb.id_producto_bodega= ep.id_producto_bodega
+INNER JOIN bodega.producto p ON p.id_producto= pb.id_producto
+INNER JOIN inventario.pasillo ip ON ip.id_pasillo= ep.id_pasillo
+
+
+/*pasillo*/
+CREATE TABLE inventario.pasillos (
+    id_pasillo SERIAL PRIMARY KEY,
+    numero bigint NOT NULL,
+    id_sucursal bigint REFERENCES sucursal.sucursal(id_sucursal) ON DELETE CASCADE,
+    Descripcion CHARACTER(150)
+);
+
+ALTER TABLE inventario.estanteria_producto
+ADD CONSTRAINT unique_estanteria_producto UNIQUE (id_estanteria, id_producto_bodega);
+
+/*mover producto de bodega a inventario*/
 CREATE OR REPLACE FUNCTION inventario.comprobarexistencia()
 RETURNS TRIGGER AS $$
 DECLARE ex INTEGER;
 BEGIN
-  SELECT cantidad  INTO ex FROM bodega.producto_bodega WHERE id_producto_bodega=NEW.id_producto_bodega;
+  SELECT cantidad  INTO ex FROM bodega.producto_bodega WHERE id_producto = NEW.id_producto;
   IF NEW.cantidad>ex THEN 
     RAISE EXCEPTION 'cantidad insuficiente, actualmente solo hay %',ex;
   END IF;
@@ -359,7 +376,7 @@ RETURNS TRIGGER AS $$
 BEGIN
   UPDATE bodega.producto_bodega 
   SET cantidad = cantidad - NEW.cantidad
-  WHERE id_producto_bodega = NEW.id_producto_bodega;
+  WHERE id_producto = NEW.id_producto;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -371,8 +388,72 @@ FOR EACH ROW
 EXECUTE FUNCTION inventario.actualizar_bodega();
 
 
-/*vista para ver los productos de estanteria */
-CREATE OR REPLACE VIEW inventario.productos_estanteria AS
-select ep.*, p.* from inventario.estanteria_producto ep
-INNER JOIN bodega.producto_bodega pb ON pb.id_producto_bodega= ep.id_producto_bodega
-INNER JOIN bodega.producto p ON p.id_producto= pb.id_producto
+/*actualizar producto de bodega cuando ya existe*/
+
+CREATE OR REPLACE FUNCTION inventario.actualizar_bodega_actualizacion()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE bodega.producto_bodega 
+    SET cantidad = cantidad - (NEW.cantidad - OLD.cantidad)
+    WHERE id_producto = NEW.id_producto;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+/*despues del update*/
+CREATE TRIGGER trigger_actualizar_bodega_actualizacion
+AFTER UPDATE ON inventario.estanteria_producto
+FOR EACH ROW
+EXECUTE FUNCTION inventario.actualizar_bodega_actualizacion();
+
+
+/*proceso para insertar producto de bodega a estanteria*/
+CREATE OR REPLACE PROCEDURE inventario.insertar_productos_estanteria(
+    p_id_estanteria BIGINT, 
+    p_id_producto BIGINT, 
+    p_cantidad INTEGER,
+    p_id_pasillo BIGINT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    id_producto_estanteria BIGINT;
+BEGIN
+
+    INSERT INTO inventario.estanteria_producto (id_estanteria, id_producto, cantidad)
+    VALUES (p_id_estanteria, p_id_producto, p_cantidad)
+    ON CONFLICT (id_producto, id_estanteria)
+    DO UPDATE SET cantidad = inventario.estanteria_producto.cantidad + EXCLUDED.cantidad
+    RETURNING id_estanteria_producto INTO id_producto_estanteria;
+
+    BEGIN
+        INSERT INTO inventario.producto_pasillo (id_estanteria_producto, id_pasillo)
+        VALUES (id_producto_estanteria, p_id_pasillo);
+    EXCEPTION
+        WHEN unique_violation THEN
+            RAISE NOTICE 'El producto ya existe en el pasillo: %', p_id_pasillo;
+        WHEN OTHERS THEN
+            RAISE NOTICE 'Ocurrió un error inesperado: %', SQLERRM;
+            
+    END;
+END;
+$$;
+
+/*Producto estanteria */
+CREATE VIEW inventario.producto_estanteria as
+SELECT 
+    ip.id_estanteria, bp.*,ip.cantidad,   
+    ARRAY_AGG(p.numero) AS numeros_pasillo,
+    ARRAY_AGG(p.descripcion) AS descripciones_pasillo,e.id_sucursal
+FROM 
+    inventario.estanteria_producto ip
+INNER JOIN 
+    bodega.producto bp ON bp.id_producto = ip.id_producto
+INNER JOIN 
+    inventario.producto_pasillo pp ON pp.id_estanteria_producto = ip.id_estanteria_producto
+INNER JOIN 
+    inventario.pasillo p ON p.id_pasillo = pp.id_pasillo
+INNER JOIN inventario.estanteria e ON e.id_estanteria = ip.id_estanteria	
+GROUP BY 
+    bp.id_producto, ip.cantidad, ip.id_estanteria, e.id_sucursal;  
