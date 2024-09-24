@@ -76,7 +76,7 @@ export default class VentaComponent {
     }).subscribe({
       next: (response: Producto) => {
         console.log('Respuesta de la API:', response);
-
+        this.producto.setidProducto(response.id_producto)
         this.producto.setcategoria(response.categoria)
         this.producto.setcodigo(response.codigo)
         this.producto.setdescripcion(response.descripcion)
@@ -107,6 +107,7 @@ export default class VentaComponent {
   addProduct() {
     const nuevoProducto = new ProductoFactura();
 
+    nuevoProducto.settId_producto(this.producto.id_producto)
     nuevoProducto.setCodigo(this.producto.codigo)
     nuevoProducto.setNombre(this.producto.nombre)
     nuevoProducto.setCantidad(this.productosForm.value.cantidadProducto)

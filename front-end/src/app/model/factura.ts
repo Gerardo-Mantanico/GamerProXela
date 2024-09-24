@@ -4,15 +4,11 @@ export class Factura{
     
     constructor(
         private id_cliente: number,
-        private nit: string,
-        private nombre: string,
-        private direccion: string,
-        private telefono: number,
         private id_sucursal: number,
         private id_cajero: number,
-        private total: number,
-        private descuento: number,
-        private listProduct: ProductoFactura[] = [] // Cambia `any` por el tipo adecuado
+        private total: string,
+        private descuento: string,
+        private listProduct: ProductoFactura[]
     ) {}
 
     // Getters
@@ -20,21 +16,7 @@ export class Factura{
         return this.id_cliente;
     }
 
-    getNit(): string {
-        return this.nit;
-    }
-
-    getNombre(): string {
-        return this.nombre;
-    }
-
-    getDireccion(): string {
-        return this.direccion;
-    }
-
-    getTelefono(): number {
-        return this.telefono;
-    }
+   
 
     getIdSucursal(): number {
         return this.id_sucursal;
@@ -44,11 +26,11 @@ export class Factura{
         return this.id_cajero;
     }
 
-    getTotal(): number {
+    getTotal(): string {
         return this.total;
     }
 
-    getDescuento(): number {
+    getDescuento(): string {
         return this.descuento;
     }
 
@@ -56,23 +38,7 @@ export class Factura{
         return this.listProduct;
     }
 
-    // Setters
-    setNit(nit: string): void {
-        this.nit = nit;
-    }
-
-    setNombre(nombre: string): void {
-        this.nombre = nombre;
-    }
-
-    setDireccion(direccion: string): void {
-        this.direccion = direccion;
-    }
-
-    setTelefono(telefono: number): void {
-        this.telefono = telefono;
-    }
-
+    
     setIdSucursal(id_sucursal: number): void {
         this.id_sucursal = id_sucursal;
     }
@@ -81,11 +47,11 @@ export class Factura{
         this.id_cajero = id_cajero;
     }
 
-    setTotal(total: number): void {
+    setTotal(total: string): void {
         this.total = total;
     }
 
-    setDescuento(descuento: number): void {
+    setDescuento(descuento: string): void {
         this.descuento = descuento;
     }
 

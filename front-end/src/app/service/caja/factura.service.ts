@@ -38,4 +38,7 @@ export class FacturaService {
  getCliente(nit: string){
   return this.httpClient.get<any>(this.urlCliente+"/"+nit)
  }
+  insertFactura(factura: any){
+    return this.httpClient.post<any>('http://0.0.0.0:8080/factura/insert',factura)
+  }
 }

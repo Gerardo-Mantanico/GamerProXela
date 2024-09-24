@@ -1,7 +1,4 @@
 
-button{
-  width: 100%;
-}
 
 .container{
   height: 90vh;
@@ -10,4 +7,15 @@ button{
 .container-total{
   display: flex;
   flex-direction: column;
+}
+.label-nit{
+  width: 340px;
+  margin-right: 5px;
+
+}
+.msj{
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  margin-right: 50px;
 }

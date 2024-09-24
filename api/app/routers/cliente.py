@@ -16,8 +16,7 @@ router = APIRouter(
 def insert (cliente_data: Cliente):
      data = cliente_data.dict() #formater dato
      data.pop("id_cliente"); # para quitar el id de la clase
-     ClienteDB.register_cliente(conn, data)
-     return "Cliente registrado"
+     return {"id_cliente": ClienteDB.register_cliente(conn, data)}
 
 
 @router.delete("/{id}")

@@ -1,35 +1,47 @@
-
 <div class="container">
   <div class="row mt-5">
     <div class="col-lg-6">
       <form [formGroup]="facturaForm">
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons"></i></span>
-        <input type="text" (keydown)="onSearchNit($event)"   class="form-control" id="nit"  formControlName="nit"
-        placeholder="Nit" required>
 
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
-        <input type="text" class="form-control"  placeholder="Nombre del cliente" aria-label="namecliente" formControlName="nombre" aria-describedby="basic-addon1" >
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">pin_drop</i></span>
-        <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala" formControlName="direccion" aria-label="Telefono" aria-describedby="basic-addon1">
-    
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">phone_iphone</i></span>
-        <input type="number" class="form-control"  placeholder="77667898" aria-label="Telefono" formControlName="telefono" aria-describedby="basic-addon1">
-      </div>
+        <div  *ngIf="CliEstao" class="input-group mb-3">
+          <span class="msj">El nit que se ingreso no esta registrado</span>
+          <button type="button" (click)="registerCliente()" class="btn btn-success">Registrar cliente</button>
+        </div>
+        <div class="input-group mb-3"></div>
+          <label for="nit"><i class="fas fa-sort-numeric-up"></i>
+            Nit</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1"><i class="material-icons"></i></span>
+          <input type="text" (keydown)="onSearchNit($event)" class="form-control" id="nit" formControlName="nit"
+            placeholder="Nit" required>
+        </div>
+        <label for="nombre"><i class="fas fa-sort-numeric-up"></i>
+          Nombre</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
+          <input type="text" class="form-control" placeholder="Nombre del cliente" aria-label="namecliente"
+            formControlName="nombre" aria-describedby="basic-addon1">
+        </div>
+        <label for="direccion"><i class="fas fa-sort-numeric-up"></i>
+          Direccion</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1"><i class="material-icons">pin_drop</i></span>
+          <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala"
+            formControlName="direccion" aria-label="Telefono" aria-describedby="basic-addon1">
+          <span class="input-group-text" id="basic-addon1"><i class="material-icons">phone_iphone</i></span>
+          <input type="number" class="form-control" placeholder="77667898" aria-label="Telefono"
+            formControlName="telefono" aria-describedby="basic-addon1">
+        </div>
+      </form>
+      <button *ngIf="facEstado"  (click)="generarFactura()"    type="submit"    class="form-control  btn btn-primary">Realizar Factura</button>
+    </div>
+    <div class="col-lg-6 table-responsive mt-4" style="max-height: 100vh; overflow-y: auto;">
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1"><i class="material-icons">credit_card</i></span>
-        <input type="number" class="form-control" placeholder="456123789456" aria-label="code" formControlName="codigoTarjeta"  aria-describedby="basic-addon1">
+        <input type="number" class="form-control" placeholder="456123789456" aria-label="code"
+          aria-describedby="basic-addon1">
+        <button type="submit" class="btn btn-info">Aplicar Descuento</button>
       </div>
-
-      <button type="submit" class="btn btn-primary">Aceptar</button>
-   
-    </form>
-    </div>
-    <div class="col-lg-6 table-responsive" style="max-height: 100vh; overflow-y: auto;">
       <table class="table table-sm  table-hover table-borderless">
         <thead>
           <tr class="table-primary">
@@ -43,15 +55,15 @@
         <tbody>
           <tr *ngFor="let listProducto of listProductos; let i =index">
             <td>{{ listProducto.getCodigo()}}</td>
-            <td >{{ listProducto.getNombre()}}</td>
+            <td>{{ listProducto.getNombre()}}</td>
             <td>{{ listProducto.getCantidad() }}</td>
             <td>{{ listProducto.getPrecio()}}</td>
-            <td>{{listProducto.getSubtotal()}}</td>       
-          </tbody>
+            <td>{{listProducto.getSubtotal()}}</td>
+        </tbody>
       </table>
       <div class="container-total">
         <span>Total sin descuento <strong>Q {{total}}</strong></span>
-        <span>Total con descuento  <strong>Q 100.000</strong></span>
+        <span>Total con descuento <strong>Q 100.000</strong></span>
       </div>
     </div>
   </div>

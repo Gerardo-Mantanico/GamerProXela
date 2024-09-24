@@ -517,3 +517,40 @@ CREATE TRIGGER trigger_numero_factura
 BEFORE INSERT ON cajero.factura
 FOR EACH ROW
 EXECUTE FUNCTION cajero.generar_numero_factura();
+
+/*actualizar estanteria*/
+
+
+
+CREATE OR REPLACE FUNCTION cajero.actualizar_inventario()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE inventario.estanteria_producto  
+  SET cantidad = cantidad - NEW.cantidad
+  WHERE id_producto = NEW.id_producto 
+    AND id_estanteria = (SELECT id_estanteria 
+                         FROM inventario.estanteria 
+                         WHERE id_sucursal = 
+						 (select id_sucursal from cajero.factura where  id_factura=NEW.id_factura)
+                         LIMIT 1); 
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+/*despues del insert*/
+CREATE TRIGGER trigger_actualizar
+AFTER INSERT ON cajero.detalle_factura
+FOR EACH ROW
+EXECUTE FUNCTION cajero.actualizar_inventario();
+
+
+CREATE TABLE cajero.tarjeta (
+    id_tarjeta SERIAL PRIMARY KEY,
+    id_cliente serial  not null,
+    tipo_tarjeta VARCHAR(20) NOT NULL CHECK (tipo_tarjeta IN ('Común', 'Oro', 'Platino', 'Diamante')),
+    puntos INT DEFAULT 0,
+    fecha_emision date NOT NULL DEFAULT CURRENT_DATE
+);

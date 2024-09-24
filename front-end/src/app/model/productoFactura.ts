@@ -1,4 +1,5 @@
 export class ProductoFactura {
+    private id_producto!: number;
     private codigo!: string;
     private nombre!: string;
     private cantidad!: number;
@@ -6,6 +7,15 @@ export class ProductoFactura {
     private subtotal!: number
     private subtotalDescuento!: number
 
+
+
+  getId_producto(){
+     return this.id_producto;
+  }   
+
+  settId_producto(id_producto: number){
+    this.id_producto= id_producto;
+ }   
 
 
   getCodigo(): string {

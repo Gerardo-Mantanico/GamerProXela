@@ -3,19 +3,16 @@ import psycopg2  # type: ignore
 from psycopg2 import OperationalError, DatabaseError  # type: ignore
 
 
-class ClienteDB:
-
-    # Este metodo se encarga de registrar una sucursal
-    def register_cliente(self, data):
+class TarjetaDB:
+    def generar_tarjeta(self, id_cliente):
         try:
             with self.conn.cursor() as cur:
                 cur.execute(
                     """
-                        INSERT INTO cajero.cliente(
-	                    nombre, nit, telefono, direccion)
-	                    VALUES ( %(nombre)s, %(nit)s, %(telefono)s, %(direccion)s)
-                        RETURNING id_cliente 
-                            """,data,
+                        INSERT INTO cajero.tarjeta(
+                        id_cliente, tipo_tarjeta, puntos)
+                        VALUES ( %(id_cliente), 'Común', 0);
+                        """,(id_cliente,),
                 )
                 id_cliente = cur.fetchone()[0]
                 self.conn.commit() 
@@ -33,7 +30,7 @@ class ClienteDB:
             try:    
                 cur.execute(
                     """
-                    SELECT * FROM cajero.cliente WHERE nit=%s
+                    SELECT * FROM cajero.tarjeta WHERE id_cliente=%s
                 """,
                 (nit,),
                 )
@@ -60,28 +57,15 @@ class ClienteDB:
             with self.conn.cursor() as cur:
                 cur.execute(
                     """
+                        UPDATE cajero.tarjeta
+                        SET id_tarjeta=?, id_cliente=?, tipo_tarjeta=?, puntos=?, fecha_emision=?
+                        WHERE id_cliente=%(id_cliente)s;
+
                         UPDATE cajero.cliente
                         SET  nombre=%(nombre)s, telefono=%(telefono)s, direccion=%(direccion)s
                         WHERE nit=%(nit)s
                             """,
                     data,
-                )
-            self.conn.commit()
-        except (DatabaseError, psycopg2.Error) as e:
-            self.conn.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Database operation error",
-            )
-
-    def delete_cliente(self, nit):
-        try:
-            with self.conn.cursor() as cur:
-                cur.execute(
-                    """
-                 DELETE  FROM cajero.cliente WHERE nit=%s
-                """,
-                    (nit,),
                 )
             self.conn.commit()
         except (DatabaseError, psycopg2.Error) as e:
