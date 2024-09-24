@@ -2,19 +2,19 @@
   <div class="container mt-3">
     <h5 class="mb-2  title">Generar venta</h5>
       <div class="container">
+        <form [formGroup]="productosForm">
         <div class="row mb-3">
           <div class="col">
             <div class="form-group">
               <label for="codigo"> Código</label>
-              <input type="text"   (keydown)="onSearchCode($event)"  class="form-control" id="codigo" value="{{producto.codigo}}"
+              <input type="text"   (keydown)="onSearchCode($event)"  class="form-control" id="codigo" value="{{producto.codigo}}" formControlName="codigo"
                 placeholder="Codigo" required>
-
             </div>
           </div>
           <div class="col">
             <div class="form-group">
               <label for="nombre"><i class="fas fa-tag"></i> Nombre</label>
-              <input type="text"  (keydown)="onSearchName($event)" class="form-control" id="nombre" value="{{producto.nombre}}"
+              <input type="text"  (keydown)="onSearchName($event)" class="form-control" id="nombre" value="{{producto.nombre}}" formControlName="nombre"
                 placeholder="Nombre del producto" required>
             </div>
           </div>
@@ -22,39 +22,36 @@
             <div class="form-group">
               <label for="cantidad"><i class="fas fa-sort-numeric-up"></i>
                 Cantidad</label>
-              <input type="number" class="form-control" id="cantidad" value="{{producto.existencia}}" max="{{producto.existencia}}"
-                placeholder="cantidad" required>
+                <input min="1" max="{{producto.existencia}}" value="{{producto.existencia}}" type="number" class="form-control" formControlName="cantidadProducto" placeholder="Cantidad del producto" (keyup)="validarStock($event)">
+                <span *ngIf="productosForm.get('cantidadProducto')?.hasError('cantidadInvalida')  && productosForm.get('cantidadProducto')!.invalid && (productosForm.get('cantidadProducto')!.dirty || productosForm.get('cantidadProducto')!.touched)">
+                  Por favor, ingrese un valor válido.
+                </span>
+                <span *ngIf="!hayStock">Valor mayor al stock disponible</span>
             </div>
           </div>
           <div class="col">
             <div class="form-group">
               <label for="precio"><i class="fas fa-dollar-sign"></i> Precio
                 Unitario</label>
-              <input type="text" class="form-control" id="precio" value="{{producto.precio}}"
+              <input type="text" class="form-control" id="precio" value="{{producto.precio}}" formControlName="precio"
                 placeholder="Q 0.00" readonly>
             </div>
           </div>
-          <div class="col">
-            <div class="form-group">
-              <label for="subtotal"><i class="fas fa-calculator"></i>
-                Subtotal</label>
-              <input type="number" class="form-control" id="subtotal"
-                placeholder="Subtotal" readonly>
-            </div>
-          </div>
-          <div class="col">
+          <div class="col" *ngIf="hayStock">
             <div class="form-group">
               <br>
-              <button  (click)="agregar()" type="submit" class=" form-control btn btn-primary"><i
+              <button  type="submit" (click)="addProduct()" class=" form-control btn btn-primary"><i
                   class="fas fa-save"></i>Agregar</button>
             </div>
           </div>
+        
         </div>
+      </form>
       </div>
       <div class="form-group">
         <label for="descripcion"><i class="fas fa-comment-dots"></i>
           Descripción</label>
-        <textarea class="form-control" id="descripcion" rows="3"
+        <textarea class="form-control" id="descripcion" rows="3" formControlName="descripcion"
           placeholder="Ingrese una descripción">
           {{producto.descripcion}}
         </textarea>
@@ -64,8 +61,8 @@
   <div class="row mt-5">
     <div class="col-lg-12 d-flex justify-content-end">
       <div class="col-lg-5 d-flex justify-content-end gap-4">
-        <span class="total">Total Q500,000</span>
-        <button type="submit" class=" form-control btn btn-factura"><i
+        <span class="total">Total Q {{ Total }}</span>
+        <button (click)="generarFactura()" type="submit" class=" form-control btn btn-factura"><i
             class="fas fa-save"></i>Generar Factura</button>
       </div>
     </div>
@@ -78,14 +75,22 @@
             <th scope="col">Nombre</th>
             <th scope="col">Cantidad</th>
             <th scope="col">Precio Unitario</th>
-            <th scope="col">Sub total</th>
+            <th scope="col">SubTotal</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
+          <tr *ngFor="let listProducto of listProductos; let i =index">
+            <td>{{ listProducto.getCodigo()}}</td>
+            <td >{{ listProducto.getNombre()}}</td>
+            <td>{{ listProducto.getCantidad() }}</td>
+            <td>{{ listProducto.getPrecio()}}</td>
+             <td>{{listProducto.getSubtotal()}}</td>
+             <td (click)="deleteProduct(i)"><i class="bi bi-trash3-fill"></i></td>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+

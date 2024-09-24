@@ -457,3 +457,63 @@ INNER JOIN
 INNER JOIN inventario.estanteria e ON e.id_estanteria = ip.id_estanteria	
 GROUP BY 
     bp.id_producto, ip.cantidad, ip.id_estanteria, e.id_sucursal;  
+
+CREATE TABLE cajero.cliente (
+    id_cliente SERIAL  PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    nit VARCHAR(9)  NOT NULL,
+    telefono VARCHAR(15) NOT NULL,
+    direccion VARCHAR(200) NOT NULL
+)
+
+CREATE TABLE cajero.factura (
+    factura_id SERIAL PRIMARY KEY,
+    numero_factura VARCHAR(50) UNIQUE NOT NULL,
+    fecha_emision DATE NOT NULL,
+	id_sucursal  bigint not null,
+	id_cajero bigint not null,
+	id_cliente  bigint not null,
+	total money not null,
+	descuento_aplicado  money null
+
+);
+
+
+create table cajero.detalle_factura(
+	id_factura bigint not null,
+	id_producto bigint not null,
+	cantidad bigint not null
+	
+);
+
+
+CREATE TABLE IF NOT EXISTS cajero.factura
+(
+    factura_id BIGINT SERIAL,
+    numero_factura character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    fecha_emision date NOT NULL DEFAULT CURRENT_DATE,
+    id_sucursal bigint NOT NULL,
+    id_cajero bigint NOT NULL,
+    id_cliente bigint NOT NULL,
+    total money NOT NULL,
+    descuento_aplicado money,
+    CONSTRAINT factura_pkey PRIMARY KEY (factura_id),
+    CONSTRAINT factura_numero_factura_key UNIQUE (numero_factura)
+);
+
+
+
+CREATE OR REPLACE FUNCTION cajero.generar_numero_factura()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.numero_factura := 'FAC-' || nextval('cajero.factura_numero_seq');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE SEQUENCE cajero.factura_numero_seq;
+
+CREATE TRIGGER trigger_numero_factura
+BEFORE INSERT ON cajero.factura
+FOR EACH ROW
+EXECUTE FUNCTION cajero.generar_numero_factura();

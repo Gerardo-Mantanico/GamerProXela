@@ -15,10 +15,11 @@ export class Producto {
     getcategoria(): string{
          return this.categoria
     } 
+   
     // Métodos get
-        getcodigo(): string {
+    getcodigo(): string {
             return this.codigo;
-        }
+    }
 
     getdescripcion(): string {
         return this.descripcion;
@@ -88,5 +89,9 @@ export class Producto {
     setprecio(precio: string) {
         this.precio = precio.trim();
     }
+    setcategoria(categoria: string){
+        this.categoria=categoria.trim();
+    }
+    
 }
 

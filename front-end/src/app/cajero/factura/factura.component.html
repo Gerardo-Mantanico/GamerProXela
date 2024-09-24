@@ -2,35 +2,57 @@
 <div class="container">
   <div class="row mt-5">
     <div class="col-lg-6">
-
+      <form [formGroup]="facturaForm">
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1"><i class="material-icons"></i></span>
-        <input type="text" class="form-control" placeholder="NIT" aria-label="nit" aria-describedby="basic-addon1">
+        <input type="text" (keydown)="onSearchNit($event)"   class="form-control" id="nit"  formControlName="nit"
+        placeholder="Nit" required>
+
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1"><i class="material-icons">person</i></span>
-        <input type="text" class="form-control" placeholder="Nombre del cliente" aria-label="namecliente" aria-describedby="basic-addon1">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1"><i class="material-icons">contact_mail</i></span>
-        <input type="email" class="form-control" placeholder="cliente@gmail.com" aria-label="Email" aria-describedby="basic-addon1">
+        <input type="text" class="form-control"  placeholder="Nombre del cliente" aria-label="namecliente" formControlName="nombre" aria-describedby="basic-addon1" >
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1"><i class="material-icons">pin_drop</i></span>
-        <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala" aria-label="Telefono" aria-describedby="basic-addon1">
+        <input type="text" class="form-control" placeholder="10A Calle 13-92, Cdad. de Guatemala" formControlName="direccion" aria-label="Telefono" aria-describedby="basic-addon1">
+    
         <span class="input-group-text" id="basic-addon1"><i class="material-icons">phone_iphone</i></span>
-        <input type="number" class="form-control" placeholder="77667898" aria-label="Telefono" aria-describedby="basic-addon1">
+        <input type="number" class="form-control"  placeholder="77667898" aria-label="Telefono" formControlName="telefono" aria-describedby="basic-addon1">
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1"><i class="material-icons">credit_card</i></span>
-        <input type="number" class="form-control" placeholder="456123789456" aria-label="Email" aria-describedby="basic-addon1">
+        <input type="number" class="form-control" placeholder="456123789456" aria-label="code" formControlName="codigoTarjeta"  aria-describedby="basic-addon1">
       </div>
-      <button type="button" class="btn btn-primary">Aceptar</button>
-    </div>
-    <div class="col-lg-6">
-      <img src="https://templates.invoicehome.com/modelo-factura-es-franja-azul-750px.png" alt="">
 
+      <button type="submit" class="btn btn-primary">Aceptar</button>
+   
+    </form>
     </div>
-
+    <div class="col-lg-6 table-responsive" style="max-height: 100vh; overflow-y: auto;">
+      <table class="table table-sm  table-hover table-borderless">
+        <thead>
+          <tr class="table-primary">
+            <th scope="col">Codigo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio Unitario</th>
+            <th scope="col">SubTotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let listProducto of listProductos; let i =index">
+            <td>{{ listProducto.getCodigo()}}</td>
+            <td >{{ listProducto.getNombre()}}</td>
+            <td>{{ listProducto.getCantidad() }}</td>
+            <td>{{ listProducto.getPrecio()}}</td>
+            <td>{{listProducto.getSubtotal()}}</td>       
+          </tbody>
+      </table>
+      <div class="container-total">
+        <span>Total sin descuento <strong>Q {{total}}</strong></span>
+        <span>Total con descuento  <strong>Q 100.000</strong></span>
+      </div>
+    </div>
   </div>
 </div>
