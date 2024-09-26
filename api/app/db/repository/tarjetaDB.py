@@ -19,12 +19,10 @@ class TarjetaDB:
                         {'nit': nit},  # Pass a dictionary here
                     )
                     conn.commit() 
-        except (DatabaseError, psycopg2.Error) as e:
-            conn.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Database operation error",
-            )
+        except Exception as e:
+            print(e)
+            conn.rollback();
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Database operation error")
         return True
 
 
@@ -47,12 +45,10 @@ class TarjetaDB:
                         "direccion": data[4].strip(),
                     }
                     return mapped_data
-        except (DatabaseError, psycopg2.Error) as e:
-                conn.rollback()
-        raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Database operation error",
-            )
+        except Exception as e:
+            print(e)
+            conn.rollback();
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Database operation error")
 
 
     def update_cliente( data):
@@ -73,9 +69,8 @@ class TarjetaDB:
                         data,
                     )   
                     conn.commit()
-        except (DatabaseError, psycopg2.Error) as e:
-            conn.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Database operation error",
-            )
+        except Exception as e:
+            print(e)
+            conn.rollback();
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Database operation error")
+        

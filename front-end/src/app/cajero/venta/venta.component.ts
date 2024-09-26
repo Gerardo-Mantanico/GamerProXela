@@ -75,6 +75,18 @@ export default class VentaComponent {
       "nombre": nombre
     }).subscribe({
       next: (response: Producto) => {
+        if(response==null){
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "No existe ningún producto con ese codigo",
+            showConfirmButton: false,
+            timer: 2000
+          });
+          this.productosForm.reset()
+          this.producto.descripcion=""
+        }
+        else{
         console.log('Respuesta de la API:', response);
         this.producto.setidProducto(response.id_producto)
         this.producto.setcategoria(response.categoria)
@@ -87,9 +99,8 @@ export default class VentaComponent {
         this.producto.setnoPasillo(response.no_pasillo)
         this.producto.setnombre(response.nombre)
         this.producto.setprecio(response.precio)
-
         this.stockProducto = this.producto.existencia
-
+      }
       },
       error: (err) => {
         Swal.fire({
@@ -132,6 +143,12 @@ export default class VentaComponent {
     }
     else {
       existingProduct.setCantidad(nuevoProducto.getCantidad());
+      const cleanedString = nuevoProducto.getPrecio().replace("Q", "").trim();
+      const numberValue = parseFloat(cleanedString);
+      (this.Total=this.Total-existingProduct.getSubtotal()).toFixed(2)
+      existingProduct.setSubtotal(numberValue*existingProduct.getCantidad())
+
+      
     }
     this.productosForm.reset()
     this.producto = new Producto();
@@ -146,7 +163,7 @@ export default class VentaComponent {
 
   validarStock($event: any) {
 
-    if ($event.target.value <= 0) {
+    if ($event.target.value < 1) {
       this.productosForm.get('cantidadProducto')?.setValue(0);
       this.productosForm.get('cantidadProducto')?.markAsTouched();
       this.productosForm.get('cantidadProducto')?.setErrors({ 'cantidadInvalida': true });

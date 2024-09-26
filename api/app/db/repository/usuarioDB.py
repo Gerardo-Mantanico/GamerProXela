@@ -23,10 +23,10 @@ class UsuarioDB:
                             data,
                     )
                     conn.commit()
-        except (DatabaseError, psycopg2.Error) as e:
-            conn.rollback()
+        except Exception as e:
+            print(e)
+            conn.rollback();
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Database operation error")
-        
 
 
     def register_empleado( data):
@@ -41,10 +41,10 @@ class UsuarioDB:
                             data,
                     )
                     conn.commit()
-        except (DatabaseError, psycopg2.Error) as e:
-            conn.rollback()
+        except Exception as e:
+            print(e)
+            conn.rollback();
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Database operation error")
-            
 
         
     def see_user( id):

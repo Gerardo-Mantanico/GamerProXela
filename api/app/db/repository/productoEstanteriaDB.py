@@ -104,6 +104,7 @@ class ProductosEstanteriaDB():
                     }
                     return mapped_data
                 else:
+                    
                     return None  
 
         

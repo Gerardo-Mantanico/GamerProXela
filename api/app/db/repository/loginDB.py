@@ -19,5 +19,5 @@ class LoginDB():
                     return result
         except Exception as e:
             print(e)
-            # Aquí es mejor usar conn.rollback() si estás en una transacción
+            conn.rollback();
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Database operation error")
