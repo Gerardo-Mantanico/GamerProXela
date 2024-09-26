@@ -40,7 +40,7 @@
         <span class="input-group-text" id="basic-addon1"><i class="material-icons">credit_card</i></span>
         <input type="number" class="form-control" placeholder="456123789456" aria-label="code"
           aria-describedby="basic-addon1">
-        <button type="submit" class="btn btn-info">Aplicar Descuento</button>
+        <button type="submit" (click)="aplicarDescuento()" class="btn btn-info">Aplicar Descuento</button>
       </div>
       <table class="table table-sm  table-hover table-borderless">
         <thead>
@@ -63,7 +63,7 @@
       </table>
       <div class="container-total">
         <span>Total sin descuento <strong>Q {{total}}</strong></span>
-        <span>Total con descuento <strong>Q 100.000</strong></span>
+        <span>Total con descuento <strong>Q {{descuento}}</strong></span>
       </div>
     </div>
   </div>

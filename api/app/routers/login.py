@@ -1,13 +1,9 @@
-from fastapi import APIRouter,HTTPException # type: ignore
+from fastapi import APIRouter, Depends, Request, HTTPException # type: ignore
 from app.db.repository.loginDB import LoginDB
 from app.models.login import Login
-from app.db.connection.dependenciesDB  import get_connection,conn
-from app.db.connection.dbCajero import  ConnectionCajero
-from app.db.connection.dbBodega import  ConnectionBodega
-from app.db.connection.dbInventario import  ConnectionInventario
-from app.db.connection.dbAdministrador  import  ConnectionAdmin
+from app.db.connection.database import Database
 
-
+db = Database()
 
 router = APIRouter(
     prefix="/login",
@@ -17,10 +13,10 @@ router = APIRouter(
 
 
 @router.post("/insert")
-def insert (data_login: Login):
+def insert (data_login:Login):
     data = data_login.dict() 
-    global conn
-    credenciales=LoginDB.ingresar(get_connection(),data)
+    credenciales = LoginDB.ingresar(data)
+    print(credenciales)
     dictionary = {
             "id_empleado": credenciales[0][0],
             "id_sucursal": credenciales[0][1],
@@ -28,17 +24,20 @@ def insert (data_login: Login):
             "dato_extra": credenciales[0][3],
             "nombre": credenciales[0][4]
      }
+    
     if credenciales[0][2]=="C":
-        conn= ConnectionCajero
+        db.connect('cajero', 'cajero2024', 'localhost', 'tu_basedatos')
 
     elif credenciales[0][2]=='B':
-        conn= ConnectionBodega
+       db.connect('bodega', 'bodega2024', 'localhost', 'tu_basedatos')
 
     elif credenciales[0][2]=='I':
-        conn= ConnectionInventario
+        db.connect('inventario', 'inventario2024', 'localhost', 'tu_basedatos')
+        
 
     elif credenciales[0][2]=='A':
-        conn= ConnectionAdmin
+        db.connect('admin', 'admin2024', 'localhost', 'tu_basedatos')
+
 
     return dictionary
    

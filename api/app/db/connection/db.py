@@ -19,7 +19,10 @@ class Connection():
     def get_connection(self):
         if self.conn is None:
             raise Exception("No se pudo conectar a la base de datos")
-        return self.conn        
+        return  "la conexion es "+ self.conn        
 
     def __del__(self):
              self.conn.close
+    
+    def is_connected(self):
+        return  "la conexion ---> "+ self.conn is not None

@@ -1,7 +1,7 @@
 from fastapi import APIRouter,Depends,HTTPException # type: ignore
 from app.db.repository.usuarioDB import  UsuarioDB
 from app.models.usuario import Usuario, Cajero
-from app.db.connection.dependenciesDB import get_connection
+
 
 
 router = APIRouter(
@@ -12,27 +12,27 @@ router = APIRouter(
 
 
 @router.post("/insert")
-def insert (user_data: Usuario,conn=Depends(get_connection) ):
+def insert (user_data: Usuario ):
      data = user_data.dict() #formater dato
      data.pop("id"); # para quitar el id de la clase
-     UsuarioDB.register_user(  conn ,data)
+     UsuarioDB.register_user(data)
 
 
 @router.post("/cashier")
-def insert(user_data : Usuario,conn=Depends(get_connection) ):
+def insert(user_data : Usuario):
         data = user_data.dict()
         data.pop("id")
-        UsuarioDB.register_empleado(conn, data)
+        UsuarioDB.register_empleado( data)
 
 @router.get("/{id}")
-def get_user(id:int,conn=Depends(get_connection) ):
-    return UsuarioDB.see_user(conn,id) 
+def get_user(id:int):
+    return UsuarioDB.see_user(id) 
 
 
 @router.get("/users/{id}")
-def get_users(id: int,conn=Depends(get_connection) ):
+def get_users(id: int):
     items = []
-    for data in UsuarioDB.list_user(conn, id): 
+    for data in UsuarioDB.list_user( id): 
         dictionary = {
             "id_empleado": data[0],
             "nombre": data[1],
@@ -46,8 +46,8 @@ def get_users(id: int,conn=Depends(get_connection) ):
 
  
 @router.delete("/delete/{id}")
-def delete_user(id: int,conn=Depends(get_connection) ):
-      UsuarioDB.delete_user(conn,id)
+def delete_user(id: int ):
+      UsuarioDB.delete_user(id)
       return "Usuario eliminado" 
 
 

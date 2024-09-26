@@ -24,6 +24,7 @@ export default class FacturaComponent {
   public CliEstao=false;
   public facEstado=false;
   private idCliente!: number;
+  public  descuento: Number
 
   constructor(
     private facturaservice: FacturaService,
@@ -31,11 +32,13 @@ export default class FacturaComponent {
     private authservice: AuthServiceService,
     private  router: Router
    
+   
   ) {
     this.listProductos = this.facturaservice.getListaProductos();
     console.log("productos "+this.listProductos)
     this.total = this.facturaservice.getTotal();
     this.credencial = this.authservice.getCredentials()!;
+    this.descuento=0;
 
     this.facturaForm = this.formBuilder.group({
       nit: ['', [Validators.required]],
@@ -154,6 +157,10 @@ export default class FacturaComponent {
         });
       }
     })
+  }
+
+  aplicarDescuento(){
+    (this.descuento=(this.total-200)).toFixed(2)
   }
 }
 

@@ -1,51 +1,60 @@
+from app.db.connection.database import Database
+db = Database()
+
+
 class ProductosEstanteriaDB():
      
-    def insert(self, data):
-        with self.conn.cursor() as cur:
-            cur.execute(
-                """
-               CALL inventario.insertar_productos_estanteria(%(id_estanteria)s, %(id_producto)s, %(cantidad)s, %(id_pasillo)s)
-                """,data,
-            )
-            self.conn.commit()
+    def insert(data):
+        with db.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    CALL inventario.insertar_productos_estanteria(%(id_estanteria)s, %(id_producto)s, %(cantidad)s, %(id_pasillo)s)
+                    """,data,
+                )
+                conn.commit()
 
 
-    def delete(self, id):
-        with self.conn.cursor() as cur:
-            cur.execute(
-            """
+    def delete( id):
+        with db.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
                         DELETE FROM inventario.estanteria_producto  WHERE id_estanteria_producto=%s
                         """,
-            (id,),
-        )
-        self.conn.commit()
+                    (id,),
+                )
+                conn.commit()
 
 
-    def update_product(self, data):
-        with self.conn.cursor() as cur:
-            cur.execute(
-            """
+    def update_product( data):
+        with db.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
                         UPDATE inventario.estanteria_producto
 	                    SET  id_estanteria=%(id_estanteria)s, id_producto_bodega=%(id_producto_bodega)s, no_pasillo=%(no_pasillo)s
 	                    WHERE id_estanteria_producto=%(id_estanteria_producto)s
                             """,
-            data,
-        )
-        self.conn.commit()
+                    data,
+                )
+                conn.commit()
 
 
 
-    def list_product(self, id):
-        with self.conn.cursor() as cur:
-            cur.execute(
-                """
-                    SELECT *  FROM inventario.producto_estanteria WHERE id_estanteria=%s
-                """,(id,)
-            )
-            data = []
-            data = cur.fetchall()
-            productos = []
-            for row in  data:
+    def list_product( id):
+        with db.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                        SELECT *  FROM inventario.producto_estanteria WHERE id_estanteria=%s
+                    """,(id,)
+                )
+                data = []
+                data = cur.fetchall()
+                productos = []
+                for row in  data:
+                    categoria = "Videojuego" if data[6] == 1 else "Consola"
                     producto = {
                         "id_producto_estanteria": row[0],
                         "id_producto": row[1],
@@ -53,53 +62,56 @@ class ProductosEstanteriaDB():
                         "nombre": row[3],
                         "descripcion": row[4],
                         "precio": row[5],
-                        "categoria": row[6],
+                        "categoria": categoria,
                         "no_pasillo": row[8],
                         "descripcion_pasillo": row[9],
                         "existencia": row[7],
                     }
                     productos.append(producto)
-        return {"productos": productos}
+                return {"productos": productos}
+            
+
     
 
-    def list_product_estanteria(self, data):
-        with self.conn.cursor() as cur:
-            cur.execute(
-                """
+    def list_product_estanteria(data):
+        with db.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
                     SELECT * 
                     FROM inventario.producto_estanteria 
                     WHERE id_sucursal = %(id_sucursal)s 
-                    AND LOWER(codigo_producto) = LOWER( %(codigo_producto)s) 
-                    OR LOWER(nombre) = LOWER(%(nombre)s)
-                   
-               """,data,
-            )
+                    AND (LOWER(codigo_producto) = LOWER(%(codigo_producto)s) 
+                    OR LOWER(nombre) = LOWER(%(nombre)s))
+                    """, data,
+                )
 
-            data = cur.fetchone()
-            categoria = "Consola" if data[6] == 1 else "Videojuego"
-            mapped_data = {
-                "id_productoEstanteria": data[0],
-                "id_producto": data[1],
-                "codigo": data[2].strip(),  # Eliminar espacios en blanco
-                "nombre": data[3].strip(),
-                "descripcion": data[4].strip(),
-                "precio": data[5].strip(),
-                "categoria": categoria,
-                "existencia": data[7],
-                "no_pasillo": data[8],
-                "descripcion_pasillo": data[9],
+                product_data = cur.fetchone()
 
-            }
-            return mapped_data
+                if product_data:
+                    categoria = "Consola" if product_data[6] == 1 else "Videojuego"
+                    mapped_data = {
+                        "id_productoEstanteria": product_data[0],
+                        "id_producto": product_data[1],
+                        "codigo": product_data[2].strip(),  # Eliminar espacios en blanco
+                        "nombre": product_data[3].strip(),
+                        "descripcion": product_data[4].strip(),
+                        "precio": product_data[5].strip(),
+                        "categoria": categoria,
+                        "existencia": product_data[7],
+                        "no_pasillo": product_data[8],
+                        "descripcion_pasillo": product_data[9],
+                    }
+                    return mapped_data
+                else:
+                    return None  
+
         
-      
-     
-     
-     
-   
- 
+        
     
-  
+    
+        
+    
 
     
 

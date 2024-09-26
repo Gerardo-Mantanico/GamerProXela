@@ -1,7 +1,7 @@
 from fastapi import APIRouter,Depends,HTTPException # type: ignore
 from app.db.repository.bodegaDB import BodegaDB
 from app.models.bodega import Bodega
-from app.db.connection.dependenciesDB import get_connection
+
 
 
 
@@ -14,24 +14,24 @@ router = APIRouter(
 
 
 @router.post("/insert")
-def insert (data_bodega: Bodega,conn=Depends(get_connection)):
+def insert (data_bodega: Bodega):
     data = data_bodega.dict()
     data.pop("id_bodega") 
-    BodegaDB.insert(conn,data)
+    BodegaDB.insert(data)
     return "bodega registrada"
 
 
 @router.delete("delete/{id}")
-def delete (id:int,conn=Depends(get_connection)):
-        BodegaDB.delete(conn,id)
+def delete (id:int):
+        BodegaDB.delete(id)
         return "bodega eliminada"
 
 
 @router.put("/update/{id}")
-def update (data_bodega : Bodega, id: int,conn=Depends(get_connection)):
+def update (data_bodega : Bodega, id: int):
      data = data_bodega.dict()
      data ['id_bodega'] = id
-     BodegaDB.update(conn, data)
+     BodegaDB.update( data)
      return "bodega actualizada"
 
 
