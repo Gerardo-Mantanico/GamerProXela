@@ -21,9 +21,5 @@ class Connection():
             raise Exception("No se pudo conectar a la base de datos")
         return self.conn        
 
-
-
-
-
     def __del__(self):
              self.conn.close

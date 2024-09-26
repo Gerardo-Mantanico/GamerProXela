@@ -28,3 +28,15 @@
   background-color: #d4edda;
   color: #155724;
 }
+
+.msj-sucess{
+  color: green;
+  font-weight: bold;
+  font-size: large;
+}
+
+.msj-err{
+  color: red;
+  font-weight: bold;
+  font-size: large;
+}

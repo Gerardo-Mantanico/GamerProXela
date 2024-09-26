@@ -1,8 +1,7 @@
-from fastapi import APIRouter,HTTPException # type: ignore
+from fastapi import APIRouter,Depends,HTTPException # type: ignore
 from app.db.repository.clienteDB import ClienteDB
 from app.models.cliente import Cliente
-conn = None
-
+from app.db.connection.dependenciesDB import get_connection
 
 
 router = APIRouter(
@@ -13,20 +12,20 @@ router = APIRouter(
 
 
 @router.post("/insert")
-def insert (cliente_data: Cliente):
+def insert (cliente_data: Cliente,conn=Depends(get_connection)):
      data = cliente_data.dict() #formater dato
      data.pop("id_cliente"); # para quitar el id de la clase
      return {"id_cliente": ClienteDB.register_cliente(conn, data)}
 
 
 @router.delete("/{id}")
-def delete(nit: str):
+def delete(nit: str,conn=Depends(get_connection)):
       ClienteDB.delete_cliente(conn,nit)
       return "cliente eliminado"
 
 
 @router.put("/{id}")
-def update(cliente_data: Cliente, id: str):
+def update(cliente_data: Cliente, id: str,conn=Depends(get_connection)):
     print(id)  # Esto debería imprimir el ID en la consola
     data = cliente_data.dict()
     data["nit"] = id
@@ -35,7 +34,7 @@ def update(cliente_data: Cliente, id: str):
 
       
 @router.get("/{nit}")
-def get(nit:str):
+def get(nit:str,conn=Depends(get_connection)):
      return ClienteDB.see_cliente(conn,nit) 
 
 

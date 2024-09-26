@@ -1,8 +1,9 @@
-from fastapi import APIRouter,HTTPException # type: ignore
+from fastapi import APIRouter,HTTPException,Depends # type: ignore
 from app.db.repository.productoDB import ProductoDB
 from app.models.productos import Videojuegos , Consola
 from fastapi import FastAPI, HTTPException, status # type: ignore
-conn = None
+from app.db.connection.dependenciesDB import get_connection
+
 
 router = APIRouter(
     prefix="/product",
@@ -12,7 +13,7 @@ router = APIRouter(
 
 
 @router.post("/insert")
-def insert (product_data: Consola):
+def insert (product_data: Consola,conn=Depends(get_connection)):
      data = product_data.dict() #formater dato
      data.pop("id"); # para quitar el id de la clase
      categoria = data['categoria']
@@ -20,7 +21,7 @@ def insert (product_data: Consola):
 
 
 @router.get("/{id}")
-def get_produc(id:str):
+def get_produc(id:str,conn=Depends(get_connection)):
      data = ProductoDB.see_producto(conn, id)
      if data is None:
             raise HTTPException(
@@ -32,13 +33,13 @@ def get_produc(id:str):
 
 
 @router.get("/")
-def get_list_product():
+def get_list_product(conn=Depends(get_connection)):
      data = ProductoDB.product_list(conn)
      return data
 
 
 @router.delete("/{id}")
-def delete_product(id: int):
+def delete_product(id: int,conn=Depends(get_connection)):
       ProductoDB.delete_product(conn, id)
       return "producto eliminado"
 

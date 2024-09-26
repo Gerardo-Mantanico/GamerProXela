@@ -41,4 +41,9 @@ export class FacturaService {
   insertFactura(factura: any){
     return this.httpClient.post<any>('http://0.0.0.0:8080/factura/insert',factura)
   }
+ 
+  generateCard(nit: string){
+    return this.httpClient.post<any>("http://0.0.0.0:8080/factura/card/"+nit,"")
+  }
+  
 }

@@ -4,17 +4,18 @@ from psycopg2 import OperationalError, DatabaseError  # type: ignore
 
 
 class TarjetaDB:
-    def generar_tarjeta(self, id_cliente):
+    def generar_tarjeta(self, nit):
         try:
             with self.conn.cursor() as cur:
                 cur.execute(
                     """
                         INSERT INTO cajero.tarjeta(
                         id_cliente, tipo_tarjeta, puntos)
-                        VALUES ( %(id_cliente), 'Común', 0);
-                        """,(id_cliente,),
+                        VALUES ( (select id_cliente from cajero.cliente where nit=%(nit)s), 'Común', 0);
+                    """,
+                    {'nit': nit},  # Pass a dictionary here
                 )
-                id_cliente = cur.fetchone()[0]
+
                 self.conn.commit() 
         except (DatabaseError, psycopg2.Error) as e:
             self.conn.rollback()
@@ -22,8 +23,8 @@ class TarjetaDB:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Database operation error",
             )
-        return id_cliente
-    
+        return True
+
 
     def see_cliente(self, nit):
         with self.conn.cursor() as cur:

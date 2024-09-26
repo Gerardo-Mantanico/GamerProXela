@@ -1,6 +1,6 @@
 
 
-<div class="container d-flex justify-content-center" style="height: 100vh;"> 
+<div class="container d-flex justify-content-center" style="max-height: 745px; overflow-y: auto;"> 
     <div class="row" style="width: 100%;" >
         <div class="col-lg-12">
             <div class="d-flex justify-content-center mt-5 mb-3">
@@ -13,6 +13,7 @@
                           <th scope="col">Nombre</th>
                           <th scope="col">Cantidad</th>
                           <th scope="col">categoria</th>
+                          <th scope="col">Cantidad de productos</th>
                       </tr>
                       <tr *ngFor="let producto of videojuego"  >
                         <td  scope="row" >{{ producto.codigo }}</td>

@@ -5,6 +5,7 @@ import { Empleado } from '../../model/empleado';
 import { AuthServiceService } from '../../service/autoservice/auth-service.service';
 import { User } from '../../model/user';
 import { CommonModule } from '@angular/common'; 
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registrar-empleado',
@@ -58,12 +59,24 @@ export default class RegistrarEmpleadoComponent {
          user.id_empleado = empleado.getId();
          user.nombre = empleado.getNombre();
          user.rol = empleado.getRol();
-
         this.userData.push(user);
         this.checkoutForm.reset();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Empleado registrado",
+          showConfirmButton: false,
+          timer: 1500
+        });
       },
       error: (err) => {
-         
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Ya existe un empleado con esos registros",
+          showConfirmButton: false,
+          timer: 2000
+        });
         console.error('Error al agregar empleado:', err);
       }
     });

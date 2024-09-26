@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Credencial } from '../inteface/credencial';
 import { AuthServiceService } from '../service/autoservice/auth-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export default class LoginComponent {
           this.authService.saveCredentials(JSON.stringify(response));
           
           if(response.rol=='A'){
-             this.router.navigate(['admin']);
+             this.router.navigate(['admin/reportesAdmin']);
           }
           else if(response.rol=='B'){
             this.router.navigate(['bodega/ingresarProductos']);
@@ -45,7 +46,15 @@ export default class LoginComponent {
 
         },
         error: (err) => {
-          console.error('Login failed:', err);
+          this.checkoutForm.reset
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "credenciales incorrectas",
+            showConfirmButton: false,
+            timer: 2000
+          });
+          
         }
       });
     }

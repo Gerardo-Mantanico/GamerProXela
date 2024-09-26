@@ -85,3 +85,4 @@ with open(filename, mode='w', encoding='utf-8') as file:
     file.write(";\n")
 
 print(f'Sentencia INSERT INTO generada en el archivo {filename}.')
+

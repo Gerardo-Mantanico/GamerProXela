@@ -128,3 +128,70 @@ class ProductoBodegaDB:
                     }
                     videojuegos.append(videojuego)
         return {"consola": consolas, "videojuego": videojuegos}
+
+
+#producto bodega estanteria 
+    def product_list_estanteria(self, id_bodega):
+            with self.conn.cursor() as cur:
+                # Primera consulta para Consolas
+                cur.execute(
+                    """
+                SELECT bc.*, pb.cantidad,pb.id_bodega,pb.id_producto_bodega
+                FROM bodega.producto_bodega pb
+                INNER JOIN bodega.consola bc ON pb.id_producto = bc.id_producto
+                WHERE pb.id_bodega = (select id_bodega from bodega.bodega where id_sucursal=%s)
+
+                """,
+                    (id_bodega,),
+                )
+                #resolver el error 
+                data = []
+                data = cur.fetchall()
+                consolas=[]
+                for row in  data:
+                    consola = {
+                        "id": row[0],
+                        "codigo": row[1],
+                        "nombre": row[2],
+                        "descripcion": row[3],
+                        "precio": row[4],
+                        "categoria": "Consola",
+                        "marca": row[6],
+                        "modelo": row[7],
+                        "cantidad": row[8],
+                        "bodega": row[9],
+                        "id_producto_bodega" : row [10]
+                    }
+                    consolas.append(consola)
+
+                # Segunda consulta para Videojuegos
+                cur.execute(
+                    """
+                        SELECT  bv.*, pb.cantidad, pb.id_bodega ,pb.id_producto_bodega
+                        FROM bodega.producto_bodega pb
+                        INNER JOIN bodega.videojuego bv ON pb.id_producto = bv.id_producto 
+                        WHERE pb.id_bodega = (select id_bodega from bodega.bodega where id_sucursal=%s)
+                    """,
+                    (id_bodega,),
+                )
+                data = []
+                data = cur.fetchall()
+                videojuegos = []
+                for row in  data:
+                        videojuego = {
+                            "id": row[0],
+                            "codigo": row[1],
+                            "nombre": row[2],
+                            "descripcion": row[3],
+                            "precio": row[4],
+                            "categoria": "Videojuego",
+                            "genero": row[6],
+                            "fecha_lanzamiento": row[7],
+                            "plataforma": row[8],
+                            "mecanica": row[9],
+                            "cantidad": row[10],
+                            "bodega": row[11],
+                            "id_producto_bodega" : row [12]
+                        }
+                        videojuegos.append(videojuego)
+            return {"consola": consolas, "videojuego": videojuegos}

@@ -42,13 +42,16 @@
       <div class="card card-discount card-common">
         <div class="card-body">
           <h5 class="card-title">Tarjeta de puntos</h5>
+          <form [formGroup]="forms" (ngSubmit)="onSubmit()">
           <div class="input-group mb-3"> 
-          <input type="text" class="form-control" placeholder="Nombre del cliente" aria-label="namecliente"
-            formControlName="nombre" aria-describedby="basic-addon1">
-           <input type="button" class="btn  btn-primary" value="Generar Tarjeta">
+          <input type="text" class="form-control" placeholder="Ingresar el nit" aria-label="namecliente"
+             aria-describedby="basic-addon1" formControlName="nit">
+           <input type="submit" class="btn  btn-primary" value="Generar Tarjeta">
           </div>
+        </form>
+          <span class="msj-sucess" *ngIf="statusmsj">La tarjeta se genero exitosamente</span>
+          <span class="msj-err" *ngIf="statuserr">El nit que ingreso  ya cuenta con una tarjeta de puntos </span>
         </div>
       </div>
     </div>
-      
 </div>

@@ -22,4 +22,8 @@ export class ProductosService {
   getListProduct(id : number){
       return this.httpClient.get<any>(this.PRODUCT_URL+id)
   }
+
+  getListProductEstanteria(id : number){
+    return this.httpClient.get<any>(this.PRODUCT_URL+"estanteria/"+id)
+}
 }

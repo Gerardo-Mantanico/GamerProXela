@@ -100,6 +100,7 @@ export default class VentaComponent {
           timer: 2000
         });
         this.productosForm.reset()
+        this.producto.descripcion=""
       }
     });
   }
@@ -110,7 +111,12 @@ export default class VentaComponent {
     nuevoProducto.settId_producto(this.producto.id_producto)
     nuevoProducto.setCodigo(this.producto.codigo)
     nuevoProducto.setNombre(this.producto.nombre)
-    nuevoProducto.setCantidad(this.productosForm.value.cantidadProducto)
+    if(this.productosForm.value.cantidadProducto==""){
+      nuevoProducto.setCantidad(this.producto.existencia)
+    }
+    else {
+      nuevoProducto.setCantidad(this.productosForm.value.cantidadProducto)
+    }
     nuevoProducto.setPrecio(this.producto.precio)
     nuevoProducto.setSubtotalDescuento(0)
     const cleanedString = nuevoProducto.getPrecio().replace("Q", "").trim();
@@ -139,7 +145,16 @@ export default class VentaComponent {
   }
 
   validarStock($event: any) {
-    if ($event.target.value >= this.stockProducto) {
+
+    if ($event.target.value <= 0) {
+      this.productosForm.get('cantidadProducto')?.setValue(0);
+      this.productosForm.get('cantidadProducto')?.markAsTouched();
+      this.productosForm.get('cantidadProducto')?.setErrors({ 'cantidadInvalida': true });
+      this.hayStock = false;
+      return;
+    }
+  
+    if ($event.target.value > this.stockProducto ) {
       this.productosForm.get('cantidadProducto')?.setValue(this.stockProducto);
       console.log("el stock es ", this.stockProducto);
       this.productosForm.get('cantidadProducto')?.markAsTouched();

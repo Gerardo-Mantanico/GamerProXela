@@ -32,7 +32,8 @@ export default class TrasladarProductoEstanteriaComponent {
   
   getProduc() {
     this.credencial = this.authservice.getCredentials()!;
-    this.Productoservice.getListProduct(19).subscribe({
+    console.log(this.credencial.id_sucursal)
+    this.Productoservice.getListProductEstanteria(this.credencial.id_sucursal).subscribe({
       next: (response: any) => {
         this.videojuego = response.videojuego;
         this.consola = response.consola

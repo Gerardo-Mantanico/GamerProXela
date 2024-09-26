@@ -2,15 +2,15 @@
   <div class="container mt-3">
     <h5 class="mb-2  title">Generar venta</h5>
       <div class="container">
+        <div class="col">
+          <div class="form-group">
+            <label for="codigo"> Código</label>
+            <input type="text"   (keydown)="onSearchCode($event)"  class="form-control" id="codigo" value="{{producto.codigo}}" formControlName="codigo"
+              placeholder="Codigo" required>
+          </div>
+        </div>
         <form [formGroup]="productosForm">
         <div class="row mb-3">
-          <div class="col">
-            <div class="form-group">
-              <label for="codigo"> Código</label>
-              <input type="text"   (keydown)="onSearchCode($event)"  class="form-control" id="codigo" value="{{producto.codigo}}" formControlName="codigo"
-                placeholder="Codigo" required>
-            </div>
-          </div>
           <div class="col">
             <div class="form-group">
               <label for="nombre"><i class="fas fa-tag"></i> Nombre</label>
@@ -22,7 +22,7 @@
             <div class="form-group">
               <label for="cantidad"><i class="fas fa-sort-numeric-up"></i>
                 Cantidad</label>
-                <input min="1" max="{{producto.existencia}}" value="{{producto.existencia}}" type="number" class="form-control" formControlName="cantidadProducto" placeholder="Cantidad del producto" (keyup)="validarStock($event)">
+                <input min="1" max="{{producto.existencia}}"  value="{{producto.existencia}}" type="number" class="form-control" formControlName="cantidadProducto" placeholder="Cantidad del producto" (keyup)="validarStock($event)">
                 <span *ngIf="productosForm.get('cantidadProducto')?.hasError('cantidadInvalida')  && productosForm.get('cantidadProducto')!.invalid && (productosForm.get('cantidadProducto')!.dirty || productosForm.get('cantidadProducto')!.touched)">
                   Por favor, ingrese un valor válido.
                 </span>

@@ -1,0 +1,16 @@
+.title{
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn{
+    width: 100px;
+    background-color: green;
+}
+
+.input-group{
+    gap: 3px;
+}
